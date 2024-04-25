@@ -47,9 +47,10 @@ export default {
       console.log("submit!");
     },
     submit() {
-      axios.get('http://localhost:8080/login1')
+      this.$api.login()
         .then(function (res) {
           alert(JSON.stringify(res.data));
+          this.$router.push('/admin');
         }).catch(function(res){
           alert(res);
         });

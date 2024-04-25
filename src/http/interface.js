@@ -8,7 +8,7 @@ import axios from './axios'
 // 单独导出
 export const login = () => {
     return axios({
-        url: '/login',
+        url: '/login1',
         method: 'get'
     })
 }

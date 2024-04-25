@@ -2,7 +2,7 @@ import axios from 'axios';
 import config from './config';
 import qs from 'qs';
 import Cookies from "js-cookie";
-import router from '@/router'
+import router from '@/router/index'
 
 // 使用vuex做全局loading时使用
 // import store from '@/store'
