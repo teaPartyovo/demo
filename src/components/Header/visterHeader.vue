@@ -49,16 +49,12 @@ export default {
     submit() {
       axios.get('http://localhost:8080/login1')
         .then(function (res) {
-          alert(res.data);
+          alert(JSON.stringify(res.data));
         }).catch(function(res){
           alert(res);
         });
       //this.$router.push('/admin');
     }
-    // submit() {
-      
-    //   //this.$router.push('/admin');
-    // }
   },
 };
 </script>
