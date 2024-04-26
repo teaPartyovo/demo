@@ -47,9 +47,21 @@ export default {
     submit() {
       this.$api.login()
         .then(function (res) {
-          alert(res.data.token);
-          Cookies.set('token',res.data.token)
-          router.replace('/admin');
+          // alert(res.data.token);
+          Cookies.set('token',res.data.token);
+          if(res.data.role == 1){
+            router.replace('/admin');
+          }
+          else if(res.data.role == 2){
+            router.replace('/exper');
+          }
+          else if(res.data.role == 3){
+            router.replace('/tea');
+          }
+          else{
+            router.replace('/stu');
+          }
+          
         }).catch(function(res){
           alert(res);
         });
