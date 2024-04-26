@@ -10,4 +10,4 @@ Mock.mock('http://localhost:8080/login1',
           "token": "dolor dolore nisi adipisicing eiusmod"
         }
     }
-)
+) 

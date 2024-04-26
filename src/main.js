@@ -21,6 +21,13 @@ VueRouter.prototype.push = function push(location) {
 
 }
 
+// const originalPush = VueRouter.prototype.push
+
+// VueRouter.prototype.push = function push(location) {
+//   return originalPush.call(this, location).catch(err => err)
+
+// }
+
 new Vue({
   render: h => h(App),
   router
