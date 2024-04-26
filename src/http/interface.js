@@ -155,11 +155,32 @@ export const teacher_device_get = data => {
 //管理员
 //学期管理
 //新增学期信息
-export const admin_semester_post = data => {
+
+// export const admin_semester_post = data => {
+//     return axios({
+//         url: '/admin/semester',
+//         method: 'post',
+//         data
+//     })
+// }
+// export const admin_semester_post = async (data) => {
+//     try {
+//       // 发送 POST 请求到指定的后端 API 端点
+//       const response = await axios.post('/admin/semester', data);
+  
+//       // 返回请求成功时的响应数据
+//       return response.data;
+//     } catch (error) {
+//       // 捕获请求失败时的错误并抛出
+//       throw new Error(`Failed to add semester: ${error.message}`);
+//     }
+//   };
+// body
+export const admin_semester_post = (requestData) => {
     return axios({
         url: '/admin/semester',
-        method: 'post',
-        data
+        method: 'post', 
+        data: {requestData} ,
     })
 }
 
