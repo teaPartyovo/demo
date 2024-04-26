@@ -132,12 +132,13 @@ export default {
       };
       // 调用 $api.admin_semester_post 发送 POST 请求
       const response = await this.$api.admin_semester_post(requestData);
-
       // 处理成功响应（例如显示成功消息）
       console.log('学期添加成功！', response);
       // 可选：重置表单或关闭对话框
       this.dialogFormVisible = false;
       this.resetForm(); // 定义 resetForm() 方法来重置表单字段
+      // 在添加学期后重新获取数据，更新表格
+      his.settableData();
     } catch (error) {
       // 处理错误（例如显示错误消息）
       console.error('添加学期出错：', error);
