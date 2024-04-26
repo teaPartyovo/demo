@@ -24,6 +24,7 @@ export function login () {
       url: 'http://localhost:8080/common_class',
       type: 'get',
       data: {
+        "code": 1,
         "message": null,
         "data": [
           {
