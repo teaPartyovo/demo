@@ -30,7 +30,7 @@
 <script>
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import mock from '@/mock/mock.js';
+import mock from '@/mock/index.js';
 import router from '@/router';
 import global from '@/views/Global'
 export default {
@@ -49,7 +49,7 @@ export default {
       const{name, password} = this.form;
       this.$api.login()
         .then(function (res) {
-          // alert(res.data.token);
+          alert(res.data.token);
           Cookies.set('token',res.data.token);
           global.userName=name;
           if(res.data.role == 1){

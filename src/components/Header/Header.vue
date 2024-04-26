@@ -1,6 +1,6 @@
 <template> 
   <div class="Header">
-    <div class="left">你好,<i>{{userName}}</i> !</div>
+    <div class="left">你好, {{userName}}!</div>
     <div class="right">
       <el-button type="text" @click="centerDialogVisible = true">退出登录</el-button>
 

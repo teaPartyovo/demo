@@ -9,7 +9,7 @@ import axios from './axios'
 //登陆接口
 export const login = () => {
     return axios({
-        url: '/login1',
+        url: '/login_mock',
         method: 'get'
     })
 }

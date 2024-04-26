@@ -6,7 +6,7 @@ Mock.mock('http://localhost:8080/login1',
         "message": "tempor",
         "data": {
           "id": 96,
-          "role": 4,
+          "role": 1,
           "token": "dolor dolore nisi adipisicing eiusmod"
         }
     }
