@@ -6,7 +6,7 @@ import axios from './axios'
  */
 
 // 单独导出
-//登陆接口
+// 登陆接口
 export const login = (username, password) => {
     return axios({
         url: '/login_mock',
@@ -14,10 +14,20 @@ export const login = (username, password) => {
         params: { username, password }
     })
 }
+
+// //如果是body的话
+// export const login = (username, password) => {
+//     return axios({
+//         url: '/login_mock',
+//         method: 'post', //方式改为post
+//         data: { username, password } //这里改为data
+//     })
+// }
+
 //获取当前学期数据
 export const common_semester = () => {
     return axios({
-        url: '/common/semester',
+        url: '/common/semester_mock',
         method: 'get'
     })
 }
