@@ -49,7 +49,8 @@ export default {
       const{name, password} = this.form;
       this.$api.login(name, password)
         .then(function (res) {
-          alert(res.data.token);
+          //alert(res.data.token);
+          alert(res.data.role);
           Cookies.set('token',res.data.token);
           global.userName=name;
           if(res.data.role == 1){

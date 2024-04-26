@@ -11,7 +11,7 @@ export const login = (username, password) => {
     return axios({
         url: '/login_mock',
         method: 'get',
-        data: { username, password }
+        params: { username, password }
     })
 }
 //获取当前学期数据
