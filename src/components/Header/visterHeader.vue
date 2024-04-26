@@ -43,18 +43,15 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
-      console.log("submit!");
-    },
     submit() {
       this.$api.login()
         .then(function (res) {
-          alert(JSON.stringify(res.data));
-          this.$router.push('/admin');
+          alert(res.data.token);
+          Cookies.set('token',res.data.token)
+          router.push('/admin');
         }).catch(function(res){
           alert(res);
         });
-      //this.$router.push('/admin');
     }
   },
 };
