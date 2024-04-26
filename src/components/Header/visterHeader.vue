@@ -29,7 +29,7 @@
   
 <script>
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import Cookie from 'js-cookie';
 import mock from '@/mock/mock.js';
 import router from '@/router';
 export default {
