@@ -1,6 +1,6 @@
 <template> 
   <div class="Header">
-    <div class="left">你好,<i>username</i> !</div>
+    <div class="left">你好,<i>{{userName}}</i> !</div>
     <div class="right">
       <el-button type="text" @click="centerDialogVisible = true">退出登录</el-button>
 
@@ -22,10 +22,12 @@
 
 <script>
 import router from '@/router';
+import global from '@/views/Global'
 export default {
     data() {
       return {
-        centerDialogVisible: false
+        centerDialogVisible: false,
+        userName:global.userName
       };
     },
     methods:{
