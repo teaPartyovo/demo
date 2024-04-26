@@ -44,7 +44,6 @@
 </template>
 <script>
 import axios from 'axios';
-import mock from '@/mock/index.js';
 import router from '@/router';
 export default {
   data() {
