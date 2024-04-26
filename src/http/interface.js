@@ -10,7 +10,8 @@ import axios from './axios'
 export const login = (username, password) => {
     return axios({
         url: '/login_mock',
-        method: 'get'
+        method: 'get',
+        data: { username, password }
     })
 }
 //获取当前学期数据
