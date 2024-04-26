@@ -43,6 +43,9 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
+import mock from '@/mock/mock.js';
+import router from '@/router';
 export default {
   data() {
     return {
@@ -217,28 +220,7 @@ export default {
           sixth: "",
         },
       ],
-      options: [{
-          value: '选项1',
-          label: '第一周'
-        }, {
-          value: '选项2',
-          label: '第二周'
-        }, {
-          value: '选项3',
-          label: '第三周'
-        }, {
-          value: '选项4',
-          label: '第四周'
-        },{
-          value: '选项5',
-          label: '第五周'
-        },{
-          value: '选项6',
-          label: '第六周'
-        },{
-          value: '选项7',
-          label: '第七周'
-      }],
+      options: [],
       value: '',
       days: [{
           day: '1',
@@ -259,7 +241,28 @@ export default {
         day:''
     };
   },
+  created() {
+    // 在组件创建时调用 API 获取数据
+    this.fetchOptions();
+  },
   methods: {
+    /**
+     * 获取当前学期的数据
+     */
+    fetchOptions() {
+      this.$api.common_semester()
+      .then((response) => {
+        const totalWeeks = response.data.weeks;
+
+         // 根据总周数动态生成 options 数组
+         this.options = Array.from({ length: totalWeeks }, (_, index) => ({
+            value: `选项${index + 1}`,
+            label: `第${index + 1}周`
+          }));
+      }).catch((err) => {
+        alert(err);
+      });
+    },
     /**
      * 分析每一列，找出相同的
      * @param data
