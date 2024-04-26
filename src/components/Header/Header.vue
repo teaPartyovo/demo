@@ -12,7 +12,7 @@
         <span>是否退出登录</span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+          <el-button type="primary" @click="quit()">确 定</el-button>
         </span>
       </el-dialog>
     </div>
@@ -21,12 +21,18 @@
 </template>
 
 <script>
+import router from '@/router'
 export default {
     data() {
       return {
         centerDialogVisible: false
       };
+    },
+    methods: {
+    quit() {
+      router.replace('/login');
     }
+  },
 };
 </script>
 
