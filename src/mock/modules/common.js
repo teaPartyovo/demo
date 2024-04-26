@@ -21,14 +21,14 @@ export function login () {
   export function common_class () {
     return {
       // isOpen: false,
-      url: 'http://localhost:8080/common_class',
+      url: 'http://localhost:8080/common/class',
       type: 'get',
       data: {
         "code": 1,
         "message": null,
         "data": [
           {
-            "courseName": "C语言程序设计",
+            "courseName": "C语言程序设计1",
             "teacherName": "tea1",
             "classes": "3班",
             "labNumber": 602,
@@ -37,7 +37,7 @@ export function login () {
             "sessionNumber": 1
           },
           {
-            "courseName": "C语言程序设计",
+            "courseName": "C语言程序设计2",
             "teacherName": "tea1",
             "classes": "4班",
             "labNumber": 601,
@@ -46,7 +46,7 @@ export function login () {
             "sessionNumber": 5
           },
           {
-            "courseName": "C语言程序设计",
+            "courseName": "C语言程序设计3",
             "teacherName": "tea2",
             "classes": "4班",
             "labNumber": 601,
@@ -55,7 +55,7 @@ export function login () {
             "sessionNumber": 1
           },
           {
-            "courseName": "C语言程序设计",
+            "courseName": "C语言程序设计4",
             "teacherName": "tea1",
             "classes": "4班",
             "labNumber": 601,
@@ -64,7 +64,7 @@ export function login () {
             "sessionNumber": 6
           },
           {
-            "courseName": "C语言程序设计",
+            "courseName": "C语言程序设计5",
             "teacherName": "tea2",
             "classes": "4班",
             "labNumber": 601,

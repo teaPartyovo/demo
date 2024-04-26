@@ -1,9 +1,16 @@
 <template>
   <div>
     <h3 style="line-height: 30px">实验室排课表</h3>
-    <div class="select" style="line-height: 40px; text-align: left; margin-bottom: 5px;">
+    <div
+      class="select"
+      style="line-height: 40px; text-align: left; margin-bottom: 5px"
+    >
       <i>选择周数: </i>
-      <el-select v-model="value" placeholder="请选择周数" style="margin-right: 50px;">
+      <el-select
+        v-model="value"
+        placeholder="请选择周数"
+        style="margin-right: 50px"
+      >
         <el-option
           v-for="item in options"
           :key="item.value"
@@ -43,8 +50,8 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
-import router from '@/router';
+import axios from "axios";
+import router from "@/router";
 export default {
   data() {
     return {
@@ -220,68 +227,170 @@ export default {
         },
       ],
       options: [],
-      value: '',
-      days: [{
-          day: '1',
-          label: '星期一'
-        }, {
-          day: '2',
-          label: '星期二'
-        }, {
-          day: '3',
-          label: '星期三'
-        }, {
-          day: '4',
-          label: '星期四'
-        }, {
-          day: '5',
-          label: '星期五'
-        }],
-        day:''
+      value: "",
+      days: [
+        {
+          day: "1",
+          label: "星期一",
+        },
+        {
+          day: "2",
+          label: "星期二",
+        },
+        {
+          day: "3",
+          label: "星期三",
+        },
+        {
+          day: "4",
+          label: "星期四",
+        },
+        {
+          day: "5",
+          label: "星期五",
+        },
+      ],
+      day: "1",
+      week: 1,
     };
   },
   created() {
     // 在组件创建时调用 API 获取数据
     this.fetchOptions();
+    this.updateTable(this.day, this.week);
   },
   watch: {
     // 监听 day 字段的变化
     day(newValue, oldValue) {
       // 根据新选择的星期几更新 space 字段
       this.updateSpace(newValue);
-    }
+      // 调用更新表格数据的方法
+      this.day = newValue;
+      this.updateTable(newValue, this.week);
+    },
+
+    // 监听 week 字段的变化
+    value(newValue, oldValue) {
+      this.week = newValue;
+      // alert(newValue)
+      // 调用更新表格数据的方法
+      this.updateTable(this.day, newValue);
+    },
   },
   methods: {
+    // 更新表格数据的方法
+    updateTable(day, week) {
+      this.tableData.forEach((row) => {
+        row.first = "";
+        row.second = "";
+        row.third = "";
+        row.fourth = "";
+        row.fifth = "";
+        row.sixth = "";
+      });
+      // alert(this.colFields.length);
+      this.$api
+        .common_class(week)
+        .then((result) => {
+          result.data.forEach((item) => {
+            const labNumber = item.labNumber;
+            const sessionNumber = item.sessionNumber;
+
+            // 根据 labNumber 找到对应的行，如果找不到则跳过
+            const targetRow = this.tableData.find(
+              (row) => row.number == labNumber
+            );
+
+            if (targetRow) {
+              const columnIndex = (sessionNumber - 1) % 6 + 3; // 计算列索引
+              // alert(columnIndex)
+              // alert((sessionNumber - 1) / 6)
+              // 确保列索引在表格范围内，并且是今天(day)对应的数据
+              if (
+                columnIndex >= 0 &&
+                columnIndex < this.colFields.length &&
+                day - 1 == Math.floor((sessionNumber - 1) / 6)
+              ) {
+                const courseInfo = {
+                  course: item.courseName,
+                  teacher: item.teacherName,
+                  class: item.classes,
+                  week: `${item.startWeek}-${item.endWeek}`,
+                  lab: item.labNumber,
+                };
+                // 将对象转换为字符串形式
+                const courseInfoStr = `
+                课程: ${item.courseName}
+                教师: ${item.teacherName}
+                班级: ${item.classes}
+                周次: ${item.startWeek}-${item.endWeek}
+                `;
+
+                
+                if (columnIndex == 3) {
+                  targetRow.first = courseInfoStr;
+                } else if (columnIndex == 4) {
+                  targetRow.second = courseInfoStr;
+                } else if (columnIndex == 5) {
+                  targetRow.third = courseInfoStr;
+                } else if (columnIndex == 6) {
+                  targetRow.fourth = courseInfoStr;
+                } else if (columnIndex == 7) {
+                  targetRow.fifth = courseInfoStr;
+                } else if (columnIndex == 8) {
+                  targetRow.sixth = courseInfoStr;
+                }
+
+                // alert(item.labNumber)
+                // 更新表格数据中的对应位置
+
+                // this.$set(targetRow, columnIndex, {
+                //   course: item.courseName, // 课程名称
+                //   teacher: item.teacherName, // 教师名称
+                //   class: item.classes, // 班级信息
+                //   week: `${item.startWeek}-${item.endWeek}`, // 周次信息
+                //   lab: item.labNumber, // 实验室编号
+                // });
+              }
+            }
+          });
+        })
+        .catch((err) => {
+          console.error("Failed to fetch data:", err);
+        });
+    },
     // 更新 space 字段的方法
     updateSpace(day) {
       // 根据当前选择的星期几更新 space 字段
       // 示例中省略了具体的逻辑，请根据实际情况进行修改
-      this.tableData.forEach(item => {
+      this.tableData.forEach((item) => {
         item.space = `${this.getDayLabel(day)}`;
       });
     },
     // 获取星期几的中文标签
     getDayLabel(day) {
       // 根据 day 获取对应的中文标签
-      const targetDay = this.days.find(item => item.day === day);
-      return targetDay ? targetDay.label : '';
+      const targetDay = this.days.find((item) => item.day === day);
+      return targetDay ? targetDay.label : "";
     },
     /**
      * 获取当前学期的数据
      */
     fetchOptions() {
-      this.$api.common_semester()
-      .then((response) => {
-        const totalWeeks = response.data.weeks;
+      this.$api
+        .common_semester()
+        .then((response) => {
+          const totalWeeks = response.data.weeks;
 
-         // 根据总周数动态生成 options 数组
-         this.options = Array.from({ length: totalWeeks }, (_, index) => ({
+          // 根据总周数动态生成 options 数组
+          this.options = Array.from({ length: totalWeeks }, (_, index) => ({
             value: `选项${index + 1}`,
-            label: `第${index + 1}周`
+            label: `第${index + 1}周`,
           }));
-      }).catch((err) => {
-        alert(err);
-      });
+        })
+        .catch((err) => {
+          alert(err);
+        });
     },
     /**
      * 分析每一列，找出相同的
