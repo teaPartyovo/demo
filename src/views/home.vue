@@ -44,7 +44,7 @@
 </template>
 <script>
 import axios from 'axios';
-import mock from '@/mock/mock.js';
+import mock from '@/mock/index.js';
 import router from '@/router';
 export default {
   data() {
@@ -68,7 +68,7 @@ export default {
         {
           space: "星期一",
           lab: "软件实验室",
-          number: "1",
+          number: "601",
           first: "",
           second: "",
           third: "",
@@ -79,7 +79,7 @@ export default {
         {
           space: "星期一",
           lab: "软件实验室",
-          number: "2",
+          number: "602",
           first: "",
           second: "",
           third: "",
@@ -90,7 +90,7 @@ export default {
         {
           space: "星期一",
           lab: "软件实验室",
-          number: "3",
+          number: "603",
           first: "",
           second: "",
           third: "",
@@ -101,7 +101,7 @@ export default {
         {
           space: "星期一",
           lab: "软件实验室",
-          number: "4",
+          number: "604",
           first: "",
           second: "",
           third: "",
@@ -112,7 +112,7 @@ export default {
         {
           space: "星期一",
           lab: "软件实验室",
-          number: "5",
+          number: "605",
           first: "",
           second: "",
           third: "",
@@ -123,7 +123,7 @@ export default {
         {
           space: "星期一",
           lab: "软件实验室",
-          number: "6",
+          number: "606",
           first: "",
           second: "",
           third: "",
@@ -134,7 +134,7 @@ export default {
         {
           space: "星期一",
           lab: "软件实验室",
-          number: "7",
+          number: "607",
           first: "",
           second: "",
           third: "",
@@ -145,7 +145,7 @@ export default {
         {
           space: "星期一",
           lab: "软件实验室",
-          number: "8",
+          number: "608",
           first: "",
           second: "",
           third: "",
@@ -156,7 +156,7 @@ export default {
         {
           space: "星期一",
           lab: "软件实验室",
-          number: "9",
+          number: "609",
           first: "",
           second: "",
           third: "",
@@ -245,7 +245,28 @@ export default {
     // 在组件创建时调用 API 获取数据
     this.fetchOptions();
   },
+  watch: {
+    // 监听 day 字段的变化
+    day(newValue, oldValue) {
+      // 根据新选择的星期几更新 space 字段
+      this.updateSpace(newValue);
+    }
+  },
   methods: {
+    // 更新 space 字段的方法
+    updateSpace(day) {
+      // 根据当前选择的星期几更新 space 字段
+      // 示例中省略了具体的逻辑，请根据实际情况进行修改
+      this.tableData.forEach(item => {
+        item.space = `${this.getDayLabel(day)}`;
+      });
+    },
+    // 获取星期几的中文标签
+    getDayLabel(day) {
+      // 根据 day 获取对应的中文标签
+      const targetDay = this.days.find(item => item.day === day);
+      return targetDay ? targetDay.label : '';
+    },
     /**
      * 获取当前学期的数据
      */
