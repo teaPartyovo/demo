@@ -7,7 +7,7 @@ Mock.mock('http://localhost:8080/login1',
         "data": {
           "id": 96,
           "role": 60,
-          "token": "dolor dolore nisi adipisicing eiusmod"
+          "token": "cokiesfile"
         }
     }
-)
+) 
