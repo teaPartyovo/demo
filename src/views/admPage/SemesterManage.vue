@@ -29,14 +29,14 @@
           </el-form-item>
           <el-form-item label="季度" :label-width="formLabelWidth">
             <el-select v-model="form.season" placeholder="请选择季度">
-              <el-option label="春季" value="1"></el-option>
-              <el-option label="秋季" value="2"></el-option>
+              <el-option label="春季" value="2"></el-option>
+              <el-option label="秋季" value="1"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false"
+          <el-button type="primary" @click="dialogFormVisible = false,addNewSemester()"
             >确 定</el-button
           >
         </div>
@@ -122,6 +122,35 @@ export default {
           console.error('Error fetching semester data:', error);
         });
     },
+    async addNewSemester() {
+    try {
+      // 准备要发送的数据
+      const requestData = {
+        year: this.form.year,
+        season: parseInt(this.form.season), // 转换为数字
+        weeks: parseInt(this.form.weeks) // 转换为数字
+      };
+      // 调用 $api.admin_semester_post 发送 POST 请求
+      const response = await this.$api.admin_semester_post(requestData);
+
+      // 处理成功响应（例如显示成功消息）
+      console.log('学期添加成功！', response);
+      // 可选：重置表单或关闭对话框
+      this.dialogFormVisible = false;
+      this.resetForm(); // 定义 resetForm() 方法来重置表单字段
+    } catch (error) {
+      // 处理错误（例如显示错误消息）
+      console.error('添加学期出错：', error);
+      // 可选：向用户显示错误消息
+    }
+  },
+
+    resetForm() {
+      // 重置表单字段
+      this.form.year = '';
+      this.form.season = '';
+      this.form.weeks = '';
+    }
   },
 };
 </script>

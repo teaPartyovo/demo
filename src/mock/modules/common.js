@@ -21,7 +21,7 @@ export function login () {
   export function common_class () {
     return {
       // isOpen: false,
-      url: 'http://localhost:8080/common_class',
+      url: 'http://localhost:8080/common/class',
       type: 'get',
       data: {
         "code": 1,
