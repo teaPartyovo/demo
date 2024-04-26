@@ -7,7 +7,7 @@ import axios from './axios'
 
 // 单独导出
 //登陆接口
-export const login = () => {
+export const login = (username, password) => {
     return axios({
         url: '/login_mock',
         method: 'get'

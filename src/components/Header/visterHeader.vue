@@ -47,7 +47,7 @@ export default {
   methods: {
     submit() {
       const{name, password} = this.form;
-      this.$api.login()
+      this.$api.login(name, password)
         .then(function (res) {
           alert(res.data.token);
           Cookies.set('token',res.data.token);
