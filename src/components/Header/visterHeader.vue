@@ -31,6 +31,7 @@
 import axios from 'axios';
 import Cookie from 'js-cookie';
 import mock from '@/mock/mock.js';
+import router from '@/router';
 export default {
   data() {
     return {
@@ -48,7 +49,7 @@ export default {
         .then(function (res) {
           alert(res.data.token);
           Cookies.set('token',res.data.token)
-          router.push('/admin');
+          router.replace('/admin');
         }).catch(function(res){
           alert(res);
         });
