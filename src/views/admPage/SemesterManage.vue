@@ -65,16 +65,16 @@ export default {
   data() {
     return {
       tableData: [
-        {
-          date: "2016-05-02",
-          name: "春季",
-          address: "19",
-        },
-        {
-          date: "2016-05-04",
-          name: "秋季",
-          address: "18",
-        },
+        // {
+        //   date: "2016-05-02",
+        //   name: "春季",
+        //   address: "19",
+        // },
+        // {
+        //   date: "2016-05-04",
+        //   name: "秋季",
+        //   address: "18",
+        // },
       ],
       value: "",
 
@@ -88,6 +88,10 @@ export default {
         formLabelWidth: '120px'
     };
   },
+  created() {
+    // 在组件创建时调用 API 获取数据
+    this.settableData();
+  },
 
   methods: {
     setCurrent(row) {
@@ -95,6 +99,28 @@ export default {
     },
     handleCurrentChange(val) {
       this.currentRow = val;
+    },
+    settableData() {
+      // 调用 API 获取数据
+      this.$api.admin_semester_get()
+        .then(response => {
+          // 处理 API 返回的数据，转换成需要的 tableData 结构
+          this.tableData = response.data.map(item => {
+            let seasonName = item.season === 1 ? "秋季" : "春季";
+            let date = item.season === 1 ? `${item.year}-9` : `${item.year}-3`;
+            let address = item.weeks.toString();
+
+            return {
+              date: date,
+              name: seasonName,
+              address: address
+            };
+          });
+          console.log(this.tableData); // 输出转换后的 tableData
+        })
+        .catch(error => {
+          console.error('Error fetching semester data:', error);
+        });
     },
   },
 };
