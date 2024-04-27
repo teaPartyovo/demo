@@ -75,25 +75,30 @@ export default {
           path: "/approval",
         },
         {
+          id: 3,
           label: "平台用户管理",
-          children: [
-            {
-              id: 5,
-              label: "实验员管理",
-              path: "/expmange",
-            },
-            {
-              id: 6,
-              label: "教师管理",
-              path: "/teamange",
-            },
-            {
-              id: 7,
-              label: "学生管理",
-              path: "/stumange",
-            },
-          ],
+          path: "/expmange",
         },
+        // {
+        //   label: "平台用户管理",
+        //   children: [
+        //     {
+        //       id: 5,
+        //       label: "实验员管理",
+        //       path: "/expmange",
+        //     },
+        //     {
+        //       id: 6,
+        //       label: "教师管理",
+        //       path: "/teamange",
+        //     },
+        //     {
+        //       id: 7,
+        //       label: "学生管理",
+        //       path: "/stumange",
+        //     },
+        //   ],
+        // },
       ],
     };
   },
