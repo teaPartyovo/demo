@@ -41,3 +41,17 @@ export function student_loan_get () {
       }
     }
   }
+
+  export function student_loan_post () {
+    return {
+      // isOpen: false,
+      url: 'http://localhost:8080/student/loan',
+      type: 'post',
+      data: {
+        "weekNumber": 0,
+        "sessionNumber": 0,
+        "labNumber": 0,
+        "applicationReason": "string"
+    }
+    }
+  }

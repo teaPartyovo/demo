@@ -118,19 +118,19 @@ export default {
   },
   methods: {
     async fetchLabList(item) {
-      alert(item.id)
+      //alert(item.id)
       try {
         // 调用后端接口获取实验室列表数据
         const id = item.id;
-        const response = await this.$api.admin_classes_id(3);
+        const response = await this.$api.admin_classes_id(item.id);
         // 处理后端返回的数据
         if (response && response.data && Array.isArray(response.data)) {
           // 将后端返回的实验室数据转换为适合 <el-select> 组件使用的格式
           this.labs = response.data.map(lab => ({
-            label: `${lab.labName}-${lab.labNumber}`, // 标签显示 labName-labNumber
-            value: lab.id // 值为实验室的 id
-          }));
-
+        label: `${lab.labName}-${lab.labNumber}`, // 标签显示 labName-labNumber
+          value: lab.id // 值为实验室的 id
+        }));
+        
           console.log('成功从后端获取实验室列表数据：', this.labs);
         } else {
           console.error('从后端获取的实验室列表数据为空或格式不正确');
