@@ -50,11 +50,11 @@ export const common_class = week => {
 
 //学生接口
 //借用实验室
-export const student_loan_post = data => {
+export const student_loan_post = (weekNumber,sessionNumber,labNumber,applicationReason) => {
     return axios({
         url: '/student/loan',
         method: 'post',
-        data
+        data:{weekNumber,sessionNumber,labNumber,applicationReason}
     })
 }
 
@@ -67,16 +67,16 @@ export const student_loan_get = () => {
 }
 
 //修改实验室借用申请
-export const student_loan_put = data => {
+export const student_loan_put = (id,weekNumber,sessionNumber,labNumber,applicationReason) => {
     return axios({
         url: '/student/loan',
         method: 'put',
-        data
+        data:{id,weekNumber,sessionNumber,labNumber,applicationReason}
     })
 }
 
 //完成实验室借用申请
-export const student_loan_id = data => {
+export const student_loan_id = (id) => {
     return axios({
         url: '/student/loan/{id}',
         method: 'put',
