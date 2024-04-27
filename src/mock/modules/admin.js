@@ -216,3 +216,16 @@ export function admin_semester_get () {
     }
     }
   }
+
+  export function admin_loan_put () {
+    return {
+      // isOpen: false,
+      url: 'http://localhost:8080/admin/loan',
+      type: 'put',
+      data: {
+        "code": 0,
+        "message": "该请求已经审批过了",
+        "data": null
+      }
+    }
+  }

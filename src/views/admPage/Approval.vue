@@ -39,7 +39,7 @@
   </el-form>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+    <el-button type="primary" @click="dialogFormVisible = false, Confirmbutton(scope.row.id)">确 定</el-button>
   </div>
 </el-dialog>
         </template>
@@ -57,6 +57,21 @@ export default {
   methods: {
     onSubmit() {
       console.log("submit!");
+    },
+    // 确认审核
+    async Confirmbutton(id) {
+      // 审核通过或不通过的逻辑
+      // 调用后端接口
+      const status = this.form.lab;
+      if (!this.form.lab) {
+        alert("没有选择是否通过审核");
+        return;
+      }
+      const response = await this.$api.admin_loan_put(id, status);
+      if (response && response.data && response.data.code === 0) {
+       // 处理 PUT 接口返回的数据
+       console.log(response.data.message);
+     }
     },
     // 从后端获取实验室列表数据
     async get_admin_classes() {

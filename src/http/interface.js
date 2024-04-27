@@ -75,6 +75,8 @@ export const student_loan_put = (id,weekNumber,sessionNumber,labNumber,applicati
     })
 }
 
+
+
 //完成实验室借用申请
 export const student_loan_id = (id) => {
     return axios({
@@ -296,11 +298,11 @@ export const admin_loan_get = data => {
 }
 
 //审批借用请求
-export const admin_loan_put = data => {
+export const admin_loan_put = (id, status) => {
     return axios({
         url: '/admin/loan',
         method: 'put',
-        data
+        params: { id, status }
     })
 }
 
