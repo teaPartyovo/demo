@@ -26,7 +26,6 @@
           <el-button type="text" size="small" v-if="scope.row.status" disabled
             >已安排实验室</el-button
           >
-          <el-button type="text" @click="dialogFormVisible = true,fetchLabList(item)" size="small" v-else>安排实验室</el-button>
           <el-dialog title="安排实验室" :visible.sync="dialogFormVisible" append-to-body>
   <el-form :model="form">
     <el-form-item label="可安排实验室" :label-width="formLabelWidth">
