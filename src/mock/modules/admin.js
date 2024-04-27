@@ -141,3 +141,78 @@ export function admin_semester_get () {
     }
   }
  
+
+//设置当前学期
+  export function admin_classes_put () {
+    return {
+      // isOpen: false,
+      url: 'http://localhost:8080/admin/loan',
+      type: 'get',
+      data: {
+        "code": 1,
+        "message": null,
+        "data": [
+          {
+            "id": 2,
+            "semesterId": 3,
+            "studentId": 12,
+            "weekNumber": 3,
+            "sessionNumber": 2,
+            "labNumber": 535,
+            "applicationReason": "“用来训练124”",
+            "applicationDate": [
+                2024,
+                4,
+                10
+            ],
+            "status": 1
+        },
+        {
+          "id": 2,
+          "semesterId": 3,
+          "studentId": 12,
+          "weekNumber": 3,
+          "sessionNumber": 2,
+          "labNumber": 535,
+          "applicationReason": "“用来训练124”",
+          "applicationDate": [
+              2024,
+              4,
+              10
+          ],
+          "status": 2
+      },
+      {
+        "id": 2,
+        "semesterId": 3,
+        "studentId": 12,
+        "weekNumber": 3,
+        "sessionNumber": 2,
+        "labNumber": 535,
+        "applicationReason": "“用来训练124”",
+        "applicationDate": [
+            2024,
+            4,
+            10
+        ],
+        "status": 3
+    },
+            {
+                "id": 2,
+                "semesterId": 3,
+                "studentId": 12,
+                "weekNumber": 3,
+                "sessionNumber": 2,
+                "labNumber": 535,
+                "applicationReason": "“用来训练124”",
+                "applicationDate": [
+                    2024,
+                    4,
+                    10
+                ],
+                "status": 4
+            }
+        ]
+    }
+    }
+  }
