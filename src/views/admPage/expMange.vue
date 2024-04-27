@@ -1,13 +1,47 @@
 <template>
-  <div class="stuMange">
+  <div class="expMange">
     <el-form :inline="true" :model="formInline" class="demo-form-inline" style="line-height: 20px; text-align: left;">
       <el-form-item >
         <el-input v-model="formInline.user" placeholder="查找姓名"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" style="margin-right: 630px;" @click="onSubmit()">查询</el-button>
-        <el-button type="primary" @click="add">添加用户</el-button>
-        <el-button type="primary" @click="add">批量添加用户</el-button>
+        <el-button type="primary" style="margin-right: 580px" @click="onSubmit"
+          >查询</el-button>
+
+        <!-- 新增用户 -->
+        <el-button type="primary" @click="dialogFormVisible = true"
+          >添加用户</el-button
+        >
+        <el-dialog title="新增用户" :visible.sync="dialogFormVisible">
+          <el-form :model="form">
+            <el-form-item label="用户名" :label-width="formLabelWidth">
+              <el-input v-model="form.year" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" :label-width="formLabelWidth">
+              <el-input v-model="form.weeks" autocomplete="off"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="dialogFormVisible = false"
+              >确 定</el-button
+            >
+          </div>
+        </el-dialog>
+        <!-- 新增用户 -->
+
+        <!-- 批量添加用户 -->
+        <el-upload
+          accept=".xlsx,.xls"
+          :file-list="fileList"
+          :show-file-list="false"
+          class="upload-demo"
+          action="https://jsonplaceholder.typicode.com/posts/"
+          :on-change="handleChange"
+          style="display: inline-block; margin-left: 10px;"
+        >
+          <el-button size="big" type="primary">上传添加批量用户</el-button>
+        </el-upload>
       </el-form-item>
     </el-form>
     <el-table
