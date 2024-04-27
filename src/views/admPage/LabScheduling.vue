@@ -26,7 +26,7 @@
           <el-button type="text" size="small" v-if="scope.row.status" disabled
             >已安排实验室</el-button
           >
-          <el-button type="text" @click="dialogFormVisible = true,fetchLabList(item)" size="small" v-else>安排实验室</el-button>
+          <el-button type="text" @click="dialogFormVisible = true,fetchLabList(scope.row)" size="small" v-else>安排实验室</el-button>
           <el-dialog title="安排实验室" :visible.sync="dialogFormVisible" append-to-body>
   <el-form :model="form">
     <el-form-item label="可安排实验室" :label-width="formLabelWidth">
@@ -149,7 +149,8 @@ export default {
       // 处理后端返回的数据
       if (response.data && Array.isArray(response.data)) {
         // 将后端返回的数据保存到前端的 tableData 中
-        this.tableData = response.data.map(item => ({
+        this.tableData = response.data.map(item => (
+          {
           semester: `${item.semester.year}-${item.semester.season}`,
           labType: item.labType,
           labID: null,
@@ -160,7 +161,10 @@ export default {
           class: item.studentClass,
           status: item.status,
           id: item.id,
-        }));
+        }
+      ));
+        // alert(JSON.stringify(this.tableData))
+        // 从后端获取实验室列表数据
 
         console.log('成功从后端获取数据：', this.tableData);
       } else {
