@@ -127,11 +127,11 @@ export const teacher_experiment_get = data => {
 }
 
 //修改未排课的申请
-export const teacher_experiment_put = (courseName,labType,studentClass,studentCount,startWeek,endWeek,sessionNumber) => {
+export const teacher_experiment_put = (id, courseName,labType,studentClass,studentCount,startWeek,endWeek,sessionNumber) => {
     return axios({
         url: '/teacher/experiment',
         method: 'put',
-        data
+        data: {id, courseName,labType,studentClass,studentCount,startWeek,endWeek,sessionNumber}
     })
 }
 

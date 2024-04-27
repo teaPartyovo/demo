@@ -321,19 +321,14 @@ export default {
     handleEdit(row) {
       this.modalType = 1;
       this.dialogVisible = true;
-      this.row_id=row.id;
+      this.row_id = row.id;
+      this.id=row.id
       // 要对当前行数据进行深拷贝
       this.form = JSON.parse(JSON.stringify(row));
     },
     handleClose() {
       this.$refs.form.resetFields()
       this.dialogVisible = false
-    },
-    handleEdit(row) {
-      this.modalType = 1
-      this.dialogVisible = true
-      // 要对当前行数据进行深拷贝
-      this.form = JSON.parse(JSON.stringify(row))
     },
     // handleDelete(row) {
     //   this.$api
