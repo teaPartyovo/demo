@@ -216,7 +216,7 @@ export function admin_semester_get () {
     }
     }
   }
-
+//列出所有实验室
   export function admin_loan_put () {
     return {
       // isOpen: false,
@@ -229,3 +229,42 @@ export function admin_semester_get () {
       }
     }
   }
+
+  export function admin_user_get () {
+    return {
+      // isOpen: false,
+      url: 'http://localhost:8080/admin/user',
+      type: 'get',
+      data: {
+        "code": 1,
+        "message": null,
+        "data": [
+          {
+            "id": 2,
+            "username": "1001",
+            "name": "实验员1",
+            "title": "教授",
+            "major": null,
+            "classes": null
+          },
+          {
+            "id": 3,
+            "username": "1002",
+            "name": "实验员2",
+            "title": "副教授",
+            "major": null,
+            "classes": null
+          },
+          {
+            "id": 4,
+            "username": "1003",
+            "name": "实验员3",
+            "title": "院长",
+            "major": null,
+            "classes": null
+          }
+        ]
+      }
+    }
+  }
+  

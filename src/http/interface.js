@@ -11,14 +11,14 @@ export const login = (username, password) => {
     return axios({
         url: '/login_mock',
         method: 'get',
-        data: { username, password }
+        params: { username, password }
     })
 }
 
 // //如果是body的话
 // export const login = (username, password) => {
 //     return axios({
-//         url: '/login_mock1',
+//         url: '/login_mock',
 //         method: 'post', //方式改为post
 //         data: { username, password } //这里改为data
 //     })
@@ -56,13 +56,6 @@ export const student_loan_post = (weekNumber,sessionNumber,labNumber,application
         method: 'post',
         data:{weekNumber,sessionNumber,labNumber,applicationReason}
     })
-
-    // return axios.post('/student/loan12', {
-    //     weekNumber: weekNumber,
-    //     sessionNumber: sessionNumber,
-    //     labNumber: labNumber,
-    //     applicationReason: applicationReason
-    //   })
 }
 
 //列出自己填报的实验室借用申请
@@ -212,11 +205,11 @@ export const admin_semester_id = (year,season) => {
 
 //平台用户管理
 //显示所有用户信息
-export const admin_user_get = data => {
+export const admin_user_get = (role,page,pageSize,name) => {
     return axios({
         url: '/admin/user',
         method: 'get',
-        data
+        params: {role,page,pageSize,name}
     })
 }
 
@@ -309,11 +302,10 @@ export const admin_loan_put = (id, status) => {
     return axios({
         url: '/admin/loan',
         method: 'put',
-        params: { id, status }
+        params: { id, password }
     })
 }
 
-// 默认全部导出
 export default {
     login,
     common_semester,
