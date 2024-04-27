@@ -314,6 +314,7 @@ export default {
     common_class,
     student_loan_post,
     student_loan_get,
+    student_loan_put,
     student_loan_id,
     technician_equip_get,
     technician_equip_put,
