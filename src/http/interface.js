@@ -40,11 +40,11 @@ export const common_laboratory = data => {
     })
 }
 //根据周数获取课程信息
-export const common_class = data => {
+export const common_class = week => {
     return axios({
         url: '/common/class',
         method: 'get',
-        data
+        params: {week}
     })
 }
 
