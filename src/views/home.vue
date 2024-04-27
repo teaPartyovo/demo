@@ -31,22 +31,24 @@
         </el-option>
       </el-select>
     </div>
-    <el-table
-      :data="tableData"
-      :span-method="objectSpanMethod"
-      border
-      :header-cell-style="{ textAlign: 'center' }"
-    >
-      <el-table-column prop="space" label="" align="center" />
-      <el-table-column prop="lab" label="实验室" align="center" />
-      <el-table-column prop="number" label="机房" align="center" />
-      <el-table-column prop="first" label="1-2" align="center" />
-      <el-table-column prop="second" label="3-5" align="center" />
-      <el-table-column prop="third" label="6-7" align="center" />
-      <el-table-column prop="fourth" label="8-9" align="center" />
-      <el-table-column prop="fifth" label="10-12" align="center" />
-      <el-table-column prop="sixth" label="13-15" align="center" />
-    </el-table>
+    <div class="home">
+      <el-table
+        :data="tableData"
+        :span-method="objectSpanMethod"
+        border
+        :header-cell-style="{ textAlign: 'center' }"
+      >
+        <el-table-column prop="space" label="" align="center" />
+        <el-table-column prop="lab" label="实验室" align="center" />
+        <el-table-column prop="number" label="机房" align="center" />
+        <el-table-column prop="first" label="1-2" align="center" />
+        <el-table-column prop="second" label="3-5" align="center" />
+        <el-table-column prop="third" label="6-7" align="center" />
+        <el-table-column prop="fourth" label="8-9" align="center" />
+        <el-table-column prop="fifth" label="10-12" align="center" />
+        <el-table-column prop="sixth" label="13-15" align="center" />
+      </el-table>
+    </div>
   </div>
 </template>
 <script>
@@ -302,7 +304,7 @@ export default {
             );
 
             if (targetRow) {
-              const columnIndex = (sessionNumber - 1) % 6 + 3; // 计算列索引
+              const columnIndex = ((sessionNumber - 1) % 6) + 3; // 计算列索引
               // alert(columnIndex)
               // alert((sessionNumber - 1) / 6)
               // 确保列索引在表格范围内，并且是今天(day)对应的数据
@@ -325,8 +327,7 @@ export default {
                 班级: ${item.classes}
                 周次: ${item.startWeek}-${item.endWeek}
                 `;
-
-                
+                // alert(courseInfoStr);
                 if (columnIndex == 3) {
                   targetRow.first = courseInfoStr;
                 } else if (columnIndex == 4) {
@@ -474,4 +475,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.home {
+  ::v-deep .el-table {
+    .cell {
+      white-space: pre-line;
+    }
+  }
+}
 </style>
