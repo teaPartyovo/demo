@@ -123,6 +123,7 @@ export default {
         // 调用后端接口获取实验室列表数据
         const id = item.id;
         const response = await this.$api.admin_classes_id(item.id);
+        // alert(JSON.stringify(response.data))
         // 处理后端返回的数据
         if (response && response.data && Array.isArray(response.data)) {
           // 将后端返回的实验室数据转换为适合 <el-select> 组件使用的格式

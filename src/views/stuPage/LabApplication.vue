@@ -174,14 +174,6 @@ export default {
   methods: {
     fetchSemesters() {
       // 模拟从后端接口获取学期数据，实际情况下需要替换成真实的后端请求
-      // this.$api
-      //   .student_loan_get()
-      //   .then((result) => {
-      //     this.semesters = result.data;
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
       // // 这里使用 setTimeout 模拟异步请求
       // setTimeout(() => {
       //   // 假设从后端获取到的学期数据为 semestersData
@@ -228,11 +220,13 @@ export default {
         if (valid) {
           // 后续对表单的处理
           // console.log(this.form,'form');
+          
           if (this.modalType === 0) {
-            addUser(this.form).then(() => {
-              //.then() 方法用于指定在异步操作成功时,即用户添加成功后执行的回调函数
-              this.getList();
-            });
+            
+            // addUser(this.form).then(() => {
+            //   //.then() 方法用于指定在异步操作成功时,即用户添加成功后执行的回调函数
+            //   this.getList();
+            // });
           } else {
             editUser(this.form).then(() => {
               this.getList();

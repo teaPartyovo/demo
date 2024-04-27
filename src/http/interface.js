@@ -259,6 +259,7 @@ export const admin_user_upload = data => {
 //实验课排课
 //根据申请获取符合条件的实验室
 export const admin_classes_id = (id) => {
+    
     return axios({
         url: `/admin/classes/${id}`, // 使用反引号和 ${} 来插入变量
         method: 'get'
