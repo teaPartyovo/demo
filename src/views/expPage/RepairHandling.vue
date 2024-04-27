@@ -89,15 +89,15 @@ export default {
       // },
 
       tableData: [
-        {
-          id: 1,
-          teacherId: 101,
-          labNumber: 'A101',
-          faultDescription: '实验仪器损坏',
-          repairDate: '2024-04-20',
-          status: 2,
-          addr: '操作'
-        }
+        // {
+        //   id: 1,
+        //   teacherId: 101,
+        //   labNumber: 'A101',
+        //   faultDescription: '实验仪器损坏',
+        //   repairDate: '2024-04-20',
+        //   status: 2,
+        //   addr: '操作'
+        // }
 
       ],
       modalType: 0,
@@ -117,7 +117,48 @@ export default {
       }
     }
   },
+  created () {
+    this.getList123();
+  },
   methods: {
+    //参数需要对齐
+  async getList123() {
+  try {
+    const response = await this.$api.technician_equip_get();
+    if (response.data && Array.isArray(response.data)) {
+      this.tableData = response.data.map(item => {
+        let statusText;
+        switch (item.status) {
+          case 1:
+            statusText = '未维修';
+            break;
+          case 2:
+            statusText = '维修中';
+            break;
+          case 3:
+            statusText = '已维修';
+            break;
+          default:
+            statusText = '未知状态';
+        }
+        return {
+          id: item.id,
+          teacherId: item.teacherId,
+          labNumber: item.labNumber,
+          faultDescription: item.faultDescription,
+          studentCount: item.studentCount,
+          repairDate: item.repairDate,
+          status: statusText,
+        };
+      });
+      console.log('成功从后端获取数据：', this.tableData);
+    } else {
+      console.error('从后端获取的数据格式不正确：', response.data);
+    }
+  } catch (error) {
+    console.error('Error in admin_user_get:', error);
+  }
+},
     // // 弹出的表单
     // submit() {
     //   this.$refs.form.validate((valid) => {

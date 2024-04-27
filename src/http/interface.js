@@ -97,11 +97,11 @@ export const technician_equip_get = data => {
 }
 
 //修改报修状态
-export const technician_equip_put = data => {
+export const technician_equip_put = (id,status) => {
     return axios({
         url: '/technician/equip',
         method: 'put',
-        data
+        params: {id,status}
     })
 }
 
