@@ -194,11 +194,11 @@ export const admin_semester_get = data => {
 }
 
 //设置当前学期
-export const admin_semester_id = data => {
+export const admin_semester_id = (year,season) => {
     return axios({
-        url: '/admin/semester/{id}',
-        method: 'put',
-        data
+        url: '/admin/semester',
+        method: 'get',
+        params: {year,season}
     })
 }
 

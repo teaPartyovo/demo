@@ -7,6 +7,7 @@
         v-model="value"
         placeholder="请选择学期"
         style="margin-right: 50px"
+        @change="handleSelectChange($event)"
       >
         <el-option
           v-for="item in tableData"
@@ -93,7 +94,53 @@ export default {
     this.settableData();
   },
 
-  methods: {
+methods: {
+  async handleSelectChange(selectedValue) {
+  try {
+    console.log('选中的值:', selectedValue);
+
+    // 解析选中的值，假设 selectedValue 格式为 'YYYY-M'，如 '2023-9' 或 '2023-3'
+    const [yearStr, seasonStr] = selectedValue.split('-');
+    const year = parseInt(yearStr); // 将年份转换为数字
+    const season = seasonStr === '9' ? 1 : seasonStr === '3' ? 2 : null; // 解析季节
+
+    if (year && season) {
+      // 构造请求数据
+      const requestData = {
+        year: year,
+        season: season,
+        weeks: null // 如果需要传递周数，可以在此设置
+      };
+
+      // 调用后端接口 admin_semester_id，传递 year 和 season 参数
+      const response = await this.$api.admin_semester_id(year, season);
+
+      // 处理后端返回的数据
+      if (response.code === 1) {
+        console.log('学期设置成功！', response.message);
+        alert("设置成功");
+        // 可选：根据需要处理返回的数据
+        if (response.data) {
+          // 处理返回的数据 response.data
+        }
+      } else if (response.code === 0) {
+        console.error('学期设置失败：', response.message);
+        // 可选：向用户显示失败消息
+      } else {
+        console.error('未知状态码：', response.code);
+        // 可选：向用户显示错误消息
+      }
+    } else {
+      console.error('无效的选中值:', selectedValue);
+    }
+  } catch (error) {
+    console.error('设置学期出错：', error);
+    // 可选：向用户显示错误消息
+  }
+},
+
+
+
     setCurrent(row) {
       this.$refs.singleTable.setCurrentRow(row);
     },
