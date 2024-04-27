@@ -240,7 +240,7 @@ export default {
           const { labNumber, faultDescription } = this.form;
           this.$api.teacher_device_post(labNumber, faultDescription).then(() => {
             // 刷新列表
-            this.getList();
+            this.getList123();
             // 清空表单数据
             this.$refs.form.resetFields();
             // 关闭弹窗
