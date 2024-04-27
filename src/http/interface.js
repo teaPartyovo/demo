@@ -59,11 +59,10 @@ export const student_loan_post = data => {
 }
 
 //列出自己填报的实验室借用申请
-export const student_loan_get = data => {
+export const student_loan_get = () => {
     return axios({
         url: '/student/loan',
-        method: 'get',
-        data
+        method: 'get'
     })
 }
 
