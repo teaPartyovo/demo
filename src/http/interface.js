@@ -80,8 +80,9 @@ export const student_loan_put = (id,weekNumber,sessionNumber,labNumber,applicati
 //完成实验室借用申请
 export const student_loan_id = (id) => {
     return axios({
-        url: `/student/loan/${id}`,
-        method: 'put'
+        url: '/student/loan/{id}',
+        method: 'put',
+        data
     })
 }
 
@@ -104,14 +105,15 @@ export const technician_equip_put = data => {
     })
 }
 
+
 //教师
 //实验室申请
 //新增申请
-export const teacher_experiment_post = data => {
+export const teacher_experiment_post = (courseName,labType,studentClass,studentCount,startWeek,endWeek,sessionNumber) => {
     return axios({
         url: '/teacher/experiment',
         method: 'post',
-        data
+        data:{courseName,labType,studentClass,studentCount,startWeek,endWeek,sessionNumber}
     })
 }
 
@@ -125,7 +127,7 @@ export const teacher_experiment_get = data => {
 }
 
 //修改未排课的申请
-export const teacher_experiment_put = data => {
+export const teacher_experiment_put = (courseName,labType,studentClass,studentCount,startWeek,endWeek,sessionNumber) => {
     return axios({
         url: '/teacher/experiment',
         method: 'put',
@@ -313,7 +315,6 @@ export default {
     student_loan_post,
     student_loan_get,
     student_loan_id,
-    student_loan_put,
     technician_equip_get,
     technician_equip_put,
     teacher_experiment_post,

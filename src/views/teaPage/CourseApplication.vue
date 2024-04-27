@@ -9,12 +9,12 @@
         <!-- :inline="true"移除 -->
 
         <!-- 下拉框for显示学期 -->
-        <el-form-item label="上课学期" prop="semesterId">
+        <!-- <el-form-item label="上课学期" prop="semesterId">
           <el-select v-model="form.semesterId" placeholder="请选择上课学期">
             <el-option v-for="semester in semesters" :key="semester.id" :label="semester.name" :value="semester.id">
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
 
         <!-- <el-form-item label="申请教师" prop="teacherId">
           <el-input placeholder="请输入申请周次" v-model="form.teacherId"></el-input>
@@ -79,12 +79,12 @@
         <el-table-column prop="id" label="申请ID" align="center">
         </el-table-column>
 
-        <el-table-column prop="semesterId" label="申请学期ID" align="center">
-        </el-table-column>
+        <!-- <el-table-column prop="semesterId" label="申请学期ID" align="center">
+        </el-table-column> -->
         <!-- id变对应学期数据 -->
 
-        <el-table-column prop="teacherId" label="申请教师ID" align="center">
-        </el-table-column>
+        <!-- <el-table-column prop="teacherId" label="申请教师ID" align="center">
+        </el-table-column> -->
 
         <el-table-column prop="courseName" label="课程名称" align="center">
         </el-table-column>
@@ -113,8 +113,8 @@
 
         <el-table-column prop="addr" label="操作" align="center">
           <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.row)">修改</el-button>
-              <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
+              <el-button size="mini" @click="handleEdit(scope.row)" v-if="scope.row.status=='未排课'">修改</el-button>
+              <!-- <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -178,22 +178,22 @@ export default {
       },
       // tableData: [],
       tableData: [
-        {
-          id: 1,
-          semesterId: 1,
-          teacherId: 123,
-          courseName: '计算机网络',
-          labType: '计算机实验室',
-          studentClass: '软件工程2021级8班',
-          studentCount: 30,
-          startWeek: 1,
-          endWeek: 16,
-          sessionNumber: '周一1-2节',
-          status: 0
-        },
+        // {
+        //   id: 1,
+        //   semesterId: 1,
+        //   teacherId: 123,
+        //   courseName: '计算机网络',
+        //   labType: '计算机实验室',
+        //   studentClass: '软件工程2021级8班',
+        //   studentCount: 30,
+        //   startWeek: 1,
+        //   endWeek: 16,
+        //   sessionNumber: '周一1-2节',
+        //   status: 0
+        // },
         // 其他记录...
       ],
-
+      row_id: 0,
       modalType: 0, //0 新增的弹窗 1 修改的弹窗
       // 
 
@@ -211,21 +211,36 @@ export default {
   },
 
   methods: {
-    fetchSemesters() {
-      // 模拟从后端接口获取学期数据，实际情况下需要替换成真实的后端请求
-      // 这里使用 setTimeout 模拟异步请求
-      setTimeout(() => {
-        // 假设从后端获取到的学期数据为 semestersData
-        const semestersData = [
-          { id: 1, name: '2022年春季学期' },
-          { id: 2, name: '2022年秋季学期' },
-          // 其他学期数据...
-        ];
-        // 将获取到的学期数据赋值给组件的 semesters 属性
-        this.semesters = semestersData;
-      }, 1000); // 模拟延迟 1 秒
-    },
-
+    async fetchSemesters() {
+  try {
+    const response = await this.$api.teacher_experiment_get();
+    //alert (JSON.stringify(response));
+    if (response.data && Array.isArray(response.data)) {
+      // 将后端返回的数据保存到前端的 semesters 中
+      const weekNames = ['一', '二', '三', '四', '五']; // 周数到汉字的映射
+      this.tableData = response.data.map(item => {
+        const weekNumber = Math.floor((item.sessionNumber - 1) / 6);
+        const courseNumber = (item.sessionNumber - 1) % 6 + 1;
+        return {
+          id: item.id,
+          courseName: item.courseName,
+          labType: item.labType,
+          studentClass: item.studentClass,
+          studentCount: item.studentCount,
+          startWeek: item.startWeek,
+          endWeek: item.endWeek,
+          sessionNumber: `周${weekNames[weekNumber]}第${courseNumber}节课`,
+          status: item.status === 0 ? '未排课' : '已排课',
+        };
+      });
+      console.log('成功从后端获取数据：', this.tableData);
+    } else {
+      console.error('从后端获取的数据格式不正确：', response.data);
+    }
+  } catch (error) {
+    console.error('Error in admin_user_get:', error);
+  }
+},
 
     submit() {
       this.$refs.form.validate((valid) => {
@@ -233,23 +248,82 @@ export default {
         if (valid) {
           // 后续对表单的处理
           // console.log(this.form,'form');
+
+          // alert(JSON.stringify(this.form))
           if (this.modalType === 0) {
-            addUser(this.form).then(() => { //.then() 方法用于指定在异步操作成功时,即用户添加成功后执行的回调函数
-              this.getList()
-            })
+            //semesterId,courseName,teacherId,courseName,labType,
+            //studentClass,studentCount,startWeek,endWeek,sessionNumber,
+            this.$api
+              .teacher_experiment_post(
+                this.form.courseName,
+                this.form.labType,
+                this.form.studentClass,
+                this.form.studentCount,
+                this.form.startWeek,
+                this.form.endWeek,
+                this.form.sessionNumber
+              )
+              .then((result) => {
+                if (result.code == 1) {
+                  this.fetchSemesters();
+                } else {
+                  alert("添加失败");
+                }
+              })
+              .catch((err) => {
+                // alert(1);
+                console.log(err);
+              });
+            // addUser(this.form).then(() => {
+            //   //.then() 方法用于指定在异步操作成功时,即用户添加成功后执行的回调函数
+            //   this.getList();
+            // });
           } else {
-            editUser(this.form).then(() => {
-              this.getList()
-            })
+            //
+            this.$api
+              .teacher_experiment_put(
+                this.row_id,
+                this.form.courseName,
+                this.form.labType,
+                this.form.studentClass,
+                this.form.studentCount,
+                this.form.startWeek,
+                this.form.endWeek,
+                this.form.sessionNumber
+              )
+              .then((result) => {
+                if (result.code == 1) {
+                  this.fetchSemesters();
+                } else {
+                  alert("修改失败");
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+            // editUser(this.form).then(() => {
+            //   this.getList();
+            // });
           }
           // addUser、editUser需要定义，可写在api然后再script的最前面 import { getUser, addUser, editUser, delUser } from '../../api'
 
           // 清空表单数据
-          this.$refs.form.resetFields()
+          this.$refs.form.resetFields();
           // 关闭弹窗
-          this.dialogVisible = false
+          this.dialogVisible = false;
         }
-      })
+      });
+    },
+    handleClose() {
+      this.$refs.form.resetFields();
+      this.dialogVisible = false;
+    },
+    handleEdit(row) {
+      this.modalType = 1;
+      this.dialogVisible = true;
+      this.row_id=row.id;
+      // 要对当前行数据进行深拷贝
+      this.form = JSON.parse(JSON.stringify(row));
     },
     handleClose() {
       this.$refs.form.resetFields()
@@ -261,27 +335,22 @@ export default {
       // 要对当前行数据进行深拷贝
       this.form = JSON.parse(JSON.stringify(row))
     },
-    handleDelete(row) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        delUser({ id: row.id }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-          this.getList()
-        })
-
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
-      });
-    },
+    // handleDelete(row) {
+    //   this.$api
+    //     .student_loan_id(row.id)
+    //     .then((result) => {
+    //       if (result.code == 1) {
+    //         this.fetchTableData();
+    //         alert("确认成功");
+    //       } else {
+    //         alert(result.message);
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //       alert("未知错误");
+    //     });
+    // },
 
     handleAdd() {
       this.modalType = 0
