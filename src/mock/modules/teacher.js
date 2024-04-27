@@ -44,3 +44,43 @@ export function teacher_experiment_get () {
       }
     }
   }
+
+
+
+export function teacher_device_get () {
+  return {
+    url: 'http://localhost:8080/teacher/device',
+    type: 'get',
+    data: {
+      "code": 1,
+      "message": null,
+      "data": [
+        {
+          "id": 1,
+          "teacherId": 1,
+          "labNumber": 801,
+          "faultDescription": "xxx坏了",
+          "repairDate": [
+            2024,
+            4,
+            10
+          ],
+          "status": 1 //1 未维修，2 维修中，3 已维修
+        }
+      ]
+    }
+  }
+}
+
+
+export function teacher_device_post () {
+  return {
+    url: 'http://localhost:8080/teacher/device',
+    type: 'post',
+    data: {
+      "code": 1,
+      "message": null,
+      "data": null
+    }
+  }
+}

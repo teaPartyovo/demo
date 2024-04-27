@@ -137,11 +137,11 @@ export const teacher_experiment_put = (courseName,labType,studentClass,studentCo
 
 //实验室设备保修
 //新增报修
-export const teacher_device_post = data => {
+export const teacher_device_post = (labNumber,faultDescription) => {
     return axios({
         url: '/teacher/device',
         method: 'post',
-        data
+        data:{labNumber,faultDescription}
     })
 }
 

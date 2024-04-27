@@ -21,11 +21,11 @@
           <el-input placeholder="请输入故障描述" v-model="form.faultDescription"></el-input>
         </el-form-item>
 
-        <!-- 用日期选择器选择代替输入 -->
+        <!-- 用日期选择器选择代替输入
         <el-form-item label="报修日期" prop="repairDate">
           <el-date-picker v-model="form.repairDate" type="date" placeholder="请选择报修日期" style="width: 100%;"
             :picker-options="pickerOptions"></el-date-picker>
-        </el-form-item>
+        </el-form-item> -->
 
 
       </el-form>
@@ -67,8 +67,8 @@
         <el-table-column prop="faultDescription" label="故障描述" align="center">
         </el-table-column>
 
-        <el-table-column prop="repairDate" label="报修日期" align="center">
-        </el-table-column>
+        <!-- <el-table-column prop="repairDate" label="报修日期" align="center">
+        </el-table-column> -->
 
         <el-table-column prop="status" label="维修状态" align="center">
         </el-table-column>
@@ -104,7 +104,7 @@ export default {
       form: {
         labNumber: '',
         faultDescription: '',
-        repairDate: '',
+        // repairDate: '',
       },
       rules: {
         labNumber: [
@@ -113,37 +113,37 @@ export default {
         faultDescription: [
           { required: true, message: '请输入故障描述' }
         ],
-        repairDate: [
-          { required: true, message: '请选择报修日期' }
-        ],
+        // repairDate: [
+        //   { required: true, message: '请选择报修日期' }
+        // ],
       },
 
       // tableData: [],
       tableData: [
-        {
-          id: 1,
-          teacherId: 101,
-          labNumber: 'A101',
-          faultDescription: '实验仪器损坏',
-          repairDate: '2024-04-20',
-          status: 2
-        },
-        {
-          id: 2,
-          teacherId: 102,
-          labNumber: 'B202',
-          faultDescription: '电路故障',
-          repairDate: '2024-04-22',
-          status: 1
-        },
-        {
-          id: 3,
-          teacherId: 103,
-          labNumber: 'C303',
-          faultDescription: '实验室门损坏',
-          repairDate: '2024-04-25',
-          status: 3
-        },
+        // {
+        //   id: 1,
+        //   teacherId: 101,
+        //   labNumber: 'A101',
+        //   faultDescription: '实验仪器损坏',
+        //   repairDate: '2024-04-20',
+        //   status: 2
+        // },
+        // {
+        //   id: 2,
+        //   teacherId: 102,
+        //   labNumber: 'B202',
+        //   faultDescription: '电路故障',
+        //   repairDate: '2024-04-22',
+        //   status: 1
+        // },
+        // {
+        //   id: 3,
+        //   teacherId: 103,
+        //   labNumber: 'C303',
+        //   faultDescription: '实验室门损坏',
+        //   repairDate: '2024-04-25',
+        //   status: 3
+        // },
         // 其他记录...
       ],
 
@@ -160,35 +160,99 @@ export default {
   },
 
   created() {
-
+      this.getList123();
   },
-
+        //   id: 1,
+        //   teacherId: 101,
+        //   labNumber: 'A101',
+        //   faultDescription: '实验仪器损坏',
+        //   repairDate: '2024-04-20',
+        //   status: 2
   methods: {
+    async getList123() {
+  try {
+    const response = await this.$api.teacher_device_get();
+    if (response.data && Array.isArray(response.data)) {
+      this.tableData = response.data.map(item => {
+        let statusText;
+        switch (item.status) {
+          case 1:
+            statusText = '未维修';
+            break;
+          case 2:
+            statusText = '维修中';
+            break;
+          case 3:
+            statusText = '已维修';
+            break;
+          default:
+            statusText = '未知状态';
+        }
+        return {
+          id: item.id,
+          teacherId: item.teacherId,
+          labNumber: item.labNumber,
+          faultDescription: item.faultDescription,
+          studentCount: item.studentCount,
+          repairDate: item.repairDate,
+          status: statusText,
+        };
+      });
+      console.log('成功从后端获取数据：', this.tableData);
+    } else {
+      console.error('从后端获取的数据格式不正确：', response.data);
+    }
+  } catch (error) {
+    console.error('Error in admin_user_get:', error);
+  }
+},
+    
+    // submit() {
+    //   this.$refs.form.validate((valid) => {
+    //     // console.log(valid,'valid');
+    //     if (valid) {
+    //       // 后续对表单的处理
+    //       // console.log(this.form,'form');
+    //       if (this.modalType === 0) {
+    //         addUser(this.form).then(() => { //.then() 方法用于指定在异步操作成功时,即用户添加成功后执行的回调函数
+    //           this.getList()
+    //         })
+    //       } else {
+    //         editUser(this.form).then(() => {
+    //           this.getList()
+    //         })
+    //       }
+    //       // 这里addUser、editUser需要定义，可写在api中然后再在script的最前面 import { getUser, addUser, editUser, delUser } from '../../api'
+
+    //       // 清空表单数据
+    //       this.$refs.form.resetFields()
+    //       // 关闭弹窗
+    //       this.dialogVisible = false
+    //     }
+    //   })
+    // },
+
+
 
     submit() {
       this.$refs.form.validate((valid) => {
-        // console.log(valid,'valid');
-        if (valid) {
-          // 后续对表单的处理
-          // console.log(this.form,'form');
-          if (this.modalType === 0) {
-            addUser(this.form).then(() => { //.then() 方法用于指定在异步操作成功时,即用户添加成功后执行的回调函数
-              this.getList()
-            })
-          } else {
-            editUser(this.form).then(() => {
-              this.getList()
-            })
-          }
-          // 这里addUser、editUser需要定义，可写在api中然后再在script的最前面 import { getUser, addUser, editUser, delUser } from '../../api'
-
-          // 清空表单数据
-          this.$refs.form.resetFields()
-          // 关闭弹窗
-          this.dialogVisible = false
-        }
-      })
+       if (valid) {
+          const { labNumber, faultDescription } = this.form;
+          this.$api.teacher_device_post(labNumber, faultDescription).then(() => {
+            // 刷新列表
+            this.getList();
+            // 清空表单数据
+            this.$refs.form.resetFields();
+            // 关闭弹窗
+            this.dialogVisible = false;
+          }).catch(error => {
+            console.error('Error in teacher_device_post:', error);
+          });
+       }
+      });
     },
+
+
     handleClose() {
       this.$refs.form.resetFields()
       this.dialogVisible = false
@@ -198,27 +262,6 @@ export default {
       this.dialogVisible = true
       // 要对当前行数据进行深拷贝
       this.form = JSON.parse(JSON.stringify(row))
-    },
-    handleDelete(row) {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        delUser({ id: row.id }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-          this.getList()
-        })
-
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
-      });
     },
 
     handleAdd() {
