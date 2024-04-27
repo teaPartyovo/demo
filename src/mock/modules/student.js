@@ -59,7 +59,7 @@ export function student_loan_get () {
   export function student_loan_put () {
     return {
       url: 'http://localhost:8080/student/loan',
-      type: 'post',
+      type: 'put',
       data: {
         "code": 0,
         "message": null,

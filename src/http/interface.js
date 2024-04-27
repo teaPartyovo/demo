@@ -56,13 +56,6 @@ export const student_loan_post = (weekNumber,sessionNumber,labNumber,application
         method: 'post',
         data:{weekNumber,sessionNumber,labNumber,applicationReason}
     })
-
-    // return axios.post('/student/loan12', {
-    //     weekNumber: weekNumber,
-    //     sessionNumber: sessionNumber,
-    //     labNumber: labNumber,
-    //     applicationReason: applicationReason
-    //   })
 }
 
 //列出自己填报的实验室借用申请
@@ -320,6 +313,7 @@ export default {
     student_loan_post,
     student_loan_get,
     student_loan_id,
+    student_loan_put,
     technician_equip_get,
     technician_equip_put,
     teacher_experiment_post,

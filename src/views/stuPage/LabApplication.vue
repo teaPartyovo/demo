@@ -248,9 +248,28 @@ export default {
             //   this.getList();
             // });
           } else {
-            editUser(this.form).then(() => {
-              this.getList();
-            });
+            //id,weekNumber,sessionNumber,labNumber,applicationReason
+            this.$api
+              .student_loan_put(
+                this.form.id,
+                this.form.weekNumber,
+                this.form.sessionNumber,
+                this.form.labNumber,
+                this.form.applicationReason
+              )
+              .then((result) => {
+                if (result.code == 1) {
+                  this.fetchTableData();
+                } else {
+                  alert("修改失败");
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+            // editUser(this.form).then(() => {
+            //   this.getList();
+            // });
           }
           // addUser、editUser需要定义，可写在api然后再script的最前面 import { getUser, addUser, editUser, delUser } from '../../api'
 
