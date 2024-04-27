@@ -103,6 +103,7 @@
         </el-table-column>
 
         <el-table-column prop="status" label="申请状态" align="center">
+          <!-- {{ getStatusText(scope.row.status) }} -->
         </el-table-column>
         <!-- 数字对应转换为文字 1 未审核、2 通过、3 驳回、4 使用完毕 -->
 
@@ -115,6 +116,7 @@
               type="danger"
               size="mini"
               @click="handleDelete(scope.row)"
+              v-if="scope.row.status == '通过'"
               >确认</el-button
             >
           </template>
@@ -186,8 +188,23 @@ export default {
       //   this.semesters = semestersData;
       // }, 1000); // 模拟延迟 1 秒
     },
-
+    getStatusText(status) {
+      // 根据状态值返回对应的文字
+      switch (status) {
+        case 1:
+          return "未审核";
+        case 2:
+          return "通过";
+        case 3:
+          return "驳回";
+        case 4:
+          return "使用完毕";
+        default:
+          return "未知状态";
+      }
+    },
     fetchTableData() {
+      this.tableData=[];
       this.$api
         .student_loan_get()
         .then((result) => {
@@ -204,8 +221,9 @@ export default {
               labNumber: item.labNumber,
               applicationReason: item.applicationReason,
               applicationDate: item.applicationDate,
-              //1是已修改，0是未修改，根據item.status顯示
-              status: item.status === 1 ? "已修改" : "未修改",
+              //1 未审核、2 通过、3 驳回、4 使用完毕，根據item.status顯示
+              status: this.getStatusText(item.status)
+              // status: item.status === 1 ? "已修改" : "未修改",
             };
             // alert(newRecord)
             this.tableData.push(newRecord);
@@ -291,25 +309,19 @@ export default {
       this.form = JSON.parse(JSON.stringify(row));
     },
     handleDelete(row) {
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          delUser({ id: row.id }).then(() => {
-            this.$message({
-              type: "success",
-              message: "删除成功!",
-            });
-            this.getList();
-          });
+      this.$api
+        .student_loan_id(row.id)
+        .then((result) => {
+          if (result.code == 1) {
+            this.fetchTableData();
+            alert("确认成功");
+          } else {
+            alert(result.message);
+          }
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
+        .catch((err) => {
+          console.log(err);
+          alert("未知错误");
         });
     },
 

@@ -21,7 +21,7 @@ export function student_loan_get () {
               4,
               10
             ],
-            "status": 1
+            "status": 2
           },
           {
             "id": 22,
@@ -69,12 +69,12 @@ export function student_loan_get () {
   }
 
 //完成实验室借用申请
-  export function student_loan_id (id) {
+  export function student_loan_id () {
     return {
-      url: 'http://localhost:8080/student/loan/${id}',
+      url: 'http://localhost:8080/student/loan/*',
       type: 'put',
       data: {
-        "code": 0,
+        "code": 1,
         "message": "该申请未通过",
         "data": null
     }
