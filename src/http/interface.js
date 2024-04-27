@@ -127,11 +127,11 @@ export const teacher_experiment_get = data => {
 }
 
 //修改未排课的申请
-export const teacher_experiment_put = (courseName,labType,studentClass,studentCount,startWeek,endWeek,sessionNumber) => {
+export const teacher_experiment_put = (id, courseName,labType,studentClass,studentCount,startWeek,endWeek,sessionNumber) => {
     return axios({
         url: '/teacher/experiment',
         method: 'put',
-        data
+        data: {id, courseName,labType,studentClass,studentCount,startWeek,endWeek,sessionNumber}
     })
 }
 
@@ -314,6 +314,7 @@ export default {
     common_class,
     student_loan_post,
     student_loan_get,
+    student_loan_put,
     student_loan_id,
     technician_equip_get,
     technician_equip_put,
