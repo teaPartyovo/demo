@@ -80,6 +80,7 @@ export default {
         //   teacherName: "王老师",
         //   class: "21软工7",
         //   status: 1,
+        //   id: 1,
         // },
         // {
         //   semester: "2023-2",
@@ -91,6 +92,7 @@ export default {
         //   teacherName: "王老师",
         //   class: "21软工7",
         //   status: 0,
+        //   id: 2,
         // },
         // {
         //   semester: "2023-1",
@@ -102,6 +104,7 @@ export default {
         //   teacherName: "王老师",
         //   class: "21软工8",
         //   status: 1,
+        //   id: 3,
         // },
       ],
       formInline: {

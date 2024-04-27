@@ -261,9 +261,9 @@ export const admin_user_upload = data => {
 export const admin_classes_id = (id) => {
     
     return axios({
-        url: `/admin/classes/${id}`, // 使用反引号和 ${} 来插入变量
+        url: `/admin/fuck/${id}`,
+        //url: '/admin/classes/${id}', // 使用反引号和 ${} 来插入变量
         method: 'get'
-        // 不需要 params，因为 id 已经在 url 中了
     })
 }
 

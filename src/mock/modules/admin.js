@@ -40,7 +40,7 @@ export function admin_semester_get () {
   export function admin_classes_id () {
     return {
       // isOpen: false,
-      url: 'http://localhost:8080/admin/classes/${id}',
+      url: 'http://localhost:8080/admin/fuck/*',
       type: 'get',
       data: {
         "code": 1,
@@ -62,38 +62,6 @@ export function admin_semester_get () {
                 "equipmentCount": 65,
                 "userId": 4
             },
-            {
-                "id": 5,
-                "labNumber": 536,
-                "labName": "机器学习实验室",
-                "labCategory": "软件",
-                "equipmentCount": 55,
-                "userId": 5
-            },
-            {
-                "id": 8,
-                "labNumber": 539,
-                "labName": "云计算实验室",
-                "labCategory": "软件",
-                "equipmentCount": 75,
-                "userId": 14
-            },
-            {
-                "id": 9,
-                "labNumber": 540,
-                "labName": "大数据实验室",
-                "labCategory": "软件",
-                "equipmentCount": 80,
-                "userId": 3
-            },
-            {
-                "id": 14,
-                "labNumber": 545,
-                "labName": "人工智能实验室",
-                "labCategory": "软件",
-                "equipmentCount": 70,
-                "userId": 14
-            }
         ]
     }
     }
