@@ -186,14 +186,16 @@ export default {
       //   this.semesters = semestersData;
       // }, 1000); // 模拟延迟 1 秒
     },
-    
+
     fetchTableData() {
       this.$api
         .student_loan_get()
         .then((result) => {
           result.data.forEach((item) => {
             //返回的applicationDate是一個年月日的數組,將其轉化為一個日期的格式
-            item.applicationDate = new Date(item.applicationDate).toLocaleDateString();
+            item.applicationDate = new Date(
+              item.applicationDate
+            ).toLocaleDateString();
             const newRecord = {
               id: item.id,
               studentId: item.studentId,
@@ -203,11 +205,11 @@ export default {
               applicationReason: item.applicationReason,
               applicationDate: item.applicationDate,
               //1是已修改，0是未修改，根據item.status顯示
-              status: item.status === 1 ? '已修改' : '未修改'
-            }
+              status: item.status === 1 ? "已修改" : "未修改",
+            };
             // alert(newRecord)
             this.tableData.push(newRecord);
-          })
+          });
           // this.tableData
         })
         .catch((err) => {
@@ -220,9 +222,27 @@ export default {
         if (valid) {
           // 后续对表单的处理
           // console.log(this.form,'form');
-          
+          // alert(JSON.stringify(this.form))
           if (this.modalType === 0) {
-            
+            // weekNumber,sessionNumber,labNumber,applicationReason
+            this.$api
+              .student_loan_post(
+                this.form.weekNumber,
+                this.form.sessionNumber,
+                this.form.labNumber,
+                this.form.applicationReason
+              )
+              .then((result) => {
+                if (result.code == 1) {
+                  this.fetchTableData();
+                } else {
+                  alert("添加失败");
+                }
+              })
+              .catch((err) => {
+                // alert(1);
+                console.log(err);
+              });
             // addUser(this.form).then(() => {
             //   //.then() 方法用于指定在异步操作成功时,即用户添加成功后执行的回调函数
             //   this.getList();

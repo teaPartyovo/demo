@@ -11,14 +11,14 @@ export const login = (username, password) => {
     return axios({
         url: '/login_mock',
         method: 'get',
-        params: { username, password }
+        data: { username, password }
     })
 }
 
 // //如果是body的话
 // export const login = (username, password) => {
 //     return axios({
-//         url: '/login_mock',
+//         url: '/login_mock1',
 //         method: 'post', //方式改为post
 //         data: { username, password } //这里改为data
 //     })
@@ -56,6 +56,13 @@ export const student_loan_post = (weekNumber,sessionNumber,labNumber,application
         method: 'post',
         data:{weekNumber,sessionNumber,labNumber,applicationReason}
     })
+
+    // return axios.post('/student/loan12', {
+    //     weekNumber: weekNumber,
+    //     sessionNumber: sessionNumber,
+    //     labNumber: labNumber,
+    //     applicationReason: applicationReason
+    //   })
 }
 
 //列出自己填报的实验室借用申请
