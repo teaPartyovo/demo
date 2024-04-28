@@ -1,9 +1,15 @@
 <template>
   <div class="expMange">
-    <el-form :inline="true" :model="formInline" class="demo-form-inline" style="line-height: 20px; text-align: left;">
-      <el-form-item >
+    <el-form
+      :inline="true"
+      :model="formInline"
+      class="demo-form-inline"
+      style="line-height: 20px; text-align: left"
+    >
+      <el-form-item>
         <el-input v-model="formInline.user" placeholder="查找姓名"></el-input>
       </el-form-item>
+
       <el-form-item>
         <el-button type="primary" style="margin-right: 580px" @click="onSubmit"
           >查询</el-button>
@@ -14,11 +20,20 @@
         >
         <el-dialog title="新增用户" :visible.sync="dialogFormVisible">
           <el-form :model="form">
-            <el-form-item label="用户名" :label-width="formLabelWidth">
-              <el-input v-model="form.year" autocomplete="off"></el-input>
+            <el-form-item label="姓名" :label-width="formLabelWidth">
+              <el-input v-model="form.username" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="专业" :label-width="formLabelWidth">
+              <el-input v-model="form.title" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="班级" :label-width="formLabelWidth">
+              <el-input v-model="form.class" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="账户" :label-width="formLabelWidth">
+              <el-input v-model="form.account" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="密码" :label-width="formLabelWidth">
-              <el-input v-model="form.weeks" autocomplete="off"></el-input>
+              <el-input v-model="form.password" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -37,11 +52,13 @@
           :show-file-list="false"
           class="upload-demo"
           action="https://jsonplaceholder.typicode.com/posts/"
-          :on-change="handleFileUpload"
+          :on-change="handleChange"
           style="display: inline-block; margin-left: 10px;"
         >
           <el-button size="big" type="primary">上传添加批量用户</el-button>
         </el-upload>
+
+
       </el-form-item>
     </el-form>
     <el-table
@@ -53,19 +70,11 @@
       </el-table-column>
       <el-table-column prop="address" label="账号" width="300">
       </el-table-column>
-      <!-- <el-table-column prop="zip" label="密码" width="120"> </el-table-column> -->
+      <el-table-column prop="zip" label="密码" width="120"></el-table-column>
       <el-table-column fixed="right" label="操作" width="300">
-        <template slot-scope="scope">
-          <el-button
-            @click.native.prevent="deleteRow(scope.$index, tableData)"
-            type="text"
-            size="small"
-          >
-            删除
-          </el-button>
+          <el-button type="text" @click="open">点击打开 Message Box</el-button>
           <el-button type="text" size="small">修改</el-button>
           <el-button type="text" size="small">重置密码</el-button>
-        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -73,75 +82,30 @@
 
 <script>
 export default {
-  created()
-  {
-      this.admin_user_get();
-  },
   methods: {
-    handleFileUpload(file) {
-    this.$api.admin_user_upload(file.raw)
-      .then(response => {
-        // 处理服务器的响应
-        console.log(response);
-      })
-      .catch(error => {
-        // 处理错误
-        console.error('Error in admin_user_upload:', error);
-      });
-     },
-    async admin_user_get() {
-      try {
-        const response = await this.$api.admin_user_get(2, 1, 100000,null);
-        //alert(JSON.stringify(response));
-        if (response.data && Array.isArray(response.data)) {
-        // 将后端返回的数据保存到前端的 tableData 中
-        
-        this.tableData = response.data.map(item => (
-          {
-            name: item.name,
-            address: item.username,
-            id: item.id,
-        }
-      ));
-        // alert(JSON.stringify(this.tableData))
-        // 从后端获取实验室列表数据
-
-        console.log('成功从后端获取数据：', this.tableData);
-      } else {
-        console.error('从后端获取的数据格式不正确：', response.data);
-      }
-       } catch (error) {
-        console.error('Error in admin_user_get:', error);
-   }
-    },
+    //删除操作
+    open() {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      },
     deleteRow(index, rows) {
       rows.splice(index, 1);
     },
-    //查询
-    async onSubmit() {
-      try {
-        const response = await this.$api.admin_user_get(2, 1, 100000,this.formInline.user);
-        //alert(JSON.stringify(response));
-        if (response.data && Array.isArray(response.data)) {
-        // 将后端返回的数据保存到前端的 tableData 中
-        
-        this.tableData = response.data.map(item => (
-          {
-            name: item.name,
-            address: item.username,
-            id: item.id,
-        }
-      ));
-        // alert(JSON.stringify(this.tableData))
-        // 从后端获取实验室列表数据
-
-        console.log('成功从后端获取数据：', this.tableData);
-      } else {
-        console.error('从后端获取的数据格式不正确：', response.data);
-      }
-       } catch (error) {
-        console.error('Error in admin_user_get:', error);
-   }
+    onSubmit() {
+      console.log("submit!");
     },
 
     //文件
@@ -151,33 +115,32 @@ export default {
   },
   data() {
     return {
-      users: [], // 用于存储后端返回的数据
       tableData: [
-        // {
-        //   name: "王实验员",
-        //   address: 202121210000,
-        //   zip: 200333,
-        // },
-        // {
-        //   name: "王实验员",
-        //   address: 202121210000,
-        //   zip: 200333,
-        // },
-        // {
-        //   name: "王实验员",
-        //   address: 202121210000,
-        //   zip: 200333,
-        // },
-        // {
-        //   name: "王实验员",
-        //   address: 202121210000,
-        //   zip: 200333,
-        // },
-        // {
-        //   name: "王实验员",
-        //   address: 202121210000,
-        //   zip: 200333,
-        // },
+        {
+          name: "王实验员",
+          address: 202121210000,
+          zip: 200333,
+        },
+        {
+          name: "王实验员",
+          address: 202121210000,
+          zip: 200333,
+        },
+        {
+          name: "王实验员",
+          address: 202121210000,
+          zip: 200333,
+        },
+        {
+          name: "王实验员",
+          address: 202121210000,
+          zip: 200333,
+        },
+        {
+          name: "王实验员",
+          address: 202121210000,
+          zip: 200333,
+        },
       ],
       formInline: {
         user: "",
@@ -187,7 +150,10 @@ export default {
       dialogFormVisible: false,
       form: {
         username: "",
+        title:"",
+        account:"",
         password: "",
+        class:""
       },
       formLabelWidth: "120px",
 
