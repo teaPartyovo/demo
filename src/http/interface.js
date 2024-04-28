@@ -105,6 +105,15 @@ export const technician_equip_put = (id,status) => {
     })
 }
 
+//填写维修情况说明
+export const technician_equip_update = (id,content) => {
+    return axios({
+        url: '/technician/equip/update',
+        method: 'put',
+        params: {id,content}
+    })
+}
+
 
 //教师
 //实验室申请
@@ -318,6 +327,7 @@ export default {
     student_loan_id,
     technician_equip_get,
     technician_equip_put,
+    technician_equip_update,
     teacher_experiment_post,
     teacher_experiment_get,
     teacher_experiment_put,
