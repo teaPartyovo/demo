@@ -260,11 +260,11 @@ export const admin_user_put = data => {
 }
 
 //excel文件批量导入
-export const admin_user_upload = data => {
+export const admin_user_upload = (file) => {
     return axios({
         url: '/admin/user/upload',
         method: 'post',
-        data
+        data:{file}
     })
 }
 

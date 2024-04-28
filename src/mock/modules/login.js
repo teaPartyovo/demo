@@ -9,7 +9,7 @@ export function login () {
         "message": "tempor",
         "data": {
           "id": 96,
-          "role": 2,
+          "role": 1,
           "token": "tokenmock"
         }
       }

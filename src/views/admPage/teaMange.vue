@@ -37,7 +37,7 @@
           :show-file-list="false"
           class="upload-demo"
           action="https://jsonplaceholder.typicode.com/posts/"
-          :on-change="handleChange"
+          :on-change="handleFileUpload"
           style="display: inline-block; margin-left: 10px;"
         >
           <el-button size="big" type="primary">上传添加批量用户</el-button>
@@ -78,6 +78,17 @@ export default {
       this.admin_user_get();
   },
   methods: {
+    handleFileUpload(file) {
+    this.$api.admin_user_upload(file.raw)
+      .then(response => {
+        // 处理服务器的响应
+        console.log(response);
+      })
+      .catch(error => {
+        // 处理错误
+        console.error('Error in admin_user_upload:', error);
+      });
+     },
     async admin_user_get() {
       try {
         const response = await this.$api.admin_user_get(3, 1, 100000,null);
