@@ -40,8 +40,12 @@
           label-width="140px"
           label-position="left"
         >
-          <el-form-item label="申请的实验室类型" prop="labType" >
-            <el-select v-model="form.labType" placeholder="请选择" style="width: 530px;">
+          <el-form-item label="申请的实验室类型" prop="labType">
+            <el-select
+              v-model="form.labType"
+              placeholder="请选择"
+              style="width: 100%"
+            >
               <el-option label="软件" value="软件"></el-option>
               <el-option label="硬件" value="硬件"></el-option>
               <el-option label="系统" value="系统"></el-option>
@@ -173,7 +177,6 @@ export default {
         semesterId: "", // 初始化申请学期字段
         courseName: "",
         teacherId: "",
-        courseName: "",
         labType: "",
         studentClass: "",
         studentCount: "",
@@ -297,7 +300,6 @@ export default {
             //   this.getList();
             // });
           } else {
-            //
             this.$api
               .teacher_experiment_put(
                 this.row_id,
@@ -343,6 +345,21 @@ export default {
       this.id = row.id;
       // 要对当前行数据进行深拷贝
       this.form = JSON.parse(JSON.stringify(row));
+
+      const weekDayMap = {
+        一: 1,
+        二: 2,
+        三: 3,
+        四: 4,
+        五: 5,
+        六: 6,
+        日: 7,
+      };
+      const match = this.form.sessionNumber.match(/周([\u4e00-\u9fa5]+)第(\d+)节课/); // 匹配 "周x第y节课" 的格式
+      const weekday = weekDayMap[match[1]]; // 获取匹配到的星期几部分，例如 "三"
+      const lessonNumber = parseInt(match[2]); // 获取匹配到的课节数字部分，并转换为整数，例如 "1"
+      //将星期转化为数字
+      this.form.sessionNumber = (weekday - 1) * 6 + lessonNumber;
     },
     handleClose() {
       this.$refs.form.resetFields();
