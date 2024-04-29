@@ -31,17 +31,17 @@ export default function $axios(options) {
           router.push('/login')
         }
         // 3. 根据请求方法，序列化传来的参数，根据后端需求是否序列化
-        if (config.method === 'post') {
-          if (config.data.__proto__ === FormData.prototype
-            || config.url.endsWith('path')
-            || config.url.endsWith('mark')
-            || config.url.endsWith('patchs')
-          ) {
+        // if (config.method === 'post') {
+        //   if (config.data.__proto__ === FormData.prototype
+        //     || config.url.endsWith('path')
+        //     || config.url.endsWith('mark')
+        //     || config.url.endsWith('patchs')
+        //   ) {
 
-          } else {
-            config.data = qs.stringify(config.data)
-          }
-        }
+        //   } else {
+        //     config.data = qs.stringify(config.data)
+        //   }
+        // }
         return config
       },
 
