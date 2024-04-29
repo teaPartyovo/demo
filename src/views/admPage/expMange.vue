@@ -61,8 +61,8 @@
       </el-table-column>
       <el-table-column prop="account" label="账号" width="200">
       </el-table-column>
-      <el-table-column prop="password" label="密码" width="120"> 
-      </el-table-column>
+      <!-- <el-table-column prop="password" label="密码" width="120"> 
+      </el-table-column> -->
       <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
           <el-button
@@ -95,7 +95,8 @@ export default {
             console.log(this.form) 
             this.$api.admin_user_post(null,this.form.account,this.form.password,this.form.name,"2",this.form.title,null,null);
             //关闭弹窗
-            this.dialogFormVisible = false
+            this.dialogFormVisible = false;
+            // location.reload();
           }else{ //编辑表单提交
             console.log(this.form) 
             //关闭弹窗
@@ -179,8 +180,8 @@ export default {
         this.tableData = response.data.map(item => (
           {
             name: item.name,
-            address: item.username,
-            id: item.id,
+            title: item.title,
+            account: item.username,
         }
       ));
         // alert(JSON.stringify(this.tableData))
@@ -208,8 +209,8 @@ export default {
         this.tableData = response.data.map(item => (
           {
             name: item.name,
-            address: item.username,
-            id: item.id,
+            title: item.title,
+            account: item.username,
         }
       ));
         // alert(JSON.stringify(this.tableData))

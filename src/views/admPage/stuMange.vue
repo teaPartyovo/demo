@@ -71,8 +71,8 @@
       <el-table-column prop="class" label="班级" width="140"> </el-table-column>
       <el-table-column prop="account" label="账号" width="160">
       </el-table-column>
-      <el-table-column prop="password" label="密码" width="160">
-      </el-table-column>
+      <!-- <el-table-column prop="password" label="密码" width="160">
+      </el-table-column> -->
       <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
           <el-button @click="handleDelete(scope.row)" type="text" size="small">
@@ -104,8 +104,12 @@ export default {
           if (this.modaltype === 0) {
             // 添加表单提交
             console.log(this.form);
+            this.$api.admin_user_post(null,this.form.account,this.form.password,this.form.name,"4",null,this.form.major,this.form.class);
+            // this.admin_user_get();
+            // location.reload();
             //关闭弹窗
             this.dialogFormVisible = false;
+            
           } else {
             //编辑表单提交
             console.log(this.form);
@@ -198,8 +202,9 @@ export default {
 
           this.tableData = response.data.map((item) => ({
             name: item.name,
-            address: item.username,
-            id: item.id,
+            title: item.major,
+            class: item.classes,
+            account: item.username,
           }));
           // alert(JSON.stringify(this.tableData))
           // 从后端获取实验室列表数据
@@ -230,8 +235,8 @@ export default {
 
           this.tableData = response.data.map((item) => ({
             name: item.name,
-            address: item.username,
-            id: item.id,
+            title: item.title,
+            account: item.username,
           }));
           // alert(JSON.stringify(this.tableData))
           // 从后端获取实验室列表数据
