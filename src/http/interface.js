@@ -271,6 +271,11 @@ export const admin_user_upload = (file) => {
     return axios({
         url: '/admin/user/upload',
         method: 'post',
+        transformRequest: [function(data, headers) {
+            // 去除post请求默认的Content-Type
+            delete headers.post['Content-Type']
+            return data
+          }],
         data: {file}
     })
 }

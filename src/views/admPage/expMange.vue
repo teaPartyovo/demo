@@ -44,18 +44,17 @@
         <!-- 新增用户 -->
 
         <!-- 批量添加用户 -->
-        <input
-          type="file"
-          ref="fileInput"
-          style="display: none"
-          @change="handleFileChange"
-        />
-        <el-button size="big" type="primary" @click="openFileInput"
-          >选择文件</el-button
+        <el-upload
+          accept=".xlsx,.xls"
+          :file-list="fileList"
+          :show-file-list="false"
+          class="upload-demo"
+          action="#"
+          :http-request="upAndDownload"
+          style="display: inline-block; margin-left: 10px"
         >
-        <el-button size="big" type="success" @click="uploadFile" enctype="multipart/form-data"
-          >上传文件</el-button
-        >
+          <el-button size="big" type="primary">批量添加用户</el-button>
+        </el-upload>
       </el-form-item>
     </el-form>
     <el-table
@@ -89,6 +88,7 @@
 
 <script>
 import Cookies from "js-cookie";
+import axios from 'axios';
 export default {
   created() {
     this.admin_user_get();
@@ -99,62 +99,28 @@ export default {
     };
   },
   methods: {
-    openFileInput() {
-      // 打开文件选择对话框
-      this.$refs.fileInput.click();
-    },
-    handleFileChange(event) {
-      // 处理文件选择变化事件
-      this.file = event.target.files[0];
-    },
-    uploadFile() {
-      if (!this.file) {
-        this.$message.error("请先选择文件");
-        return;
-      }
-
-      // 创建 FormData 对象，用于构建 multipart/form-data 格式的数据
-      const formData = new FormData();
-      formData.append("file", this.file); // 添加文件到 FormData 对象
+    upAndDownload(params){
+      let form = new FormData()
+      form.append('file', params.file)
       const token = Cookies.get('token')
-      // 发送 POST 请求，上传文件到后端接口
+      // alert(form)
       axios
-        .post("http://localhost:90/api/admin/user/upload", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data", // 设置请求头，指定数据格式为 multipart/form-data
-            "Authorization": `Bearer ${token}`
-            // 如果需要认证或其他请求头，可以在这里添加
-          },
-          withCredentials: true
-        })
-        .then((response) => {
-          this.$message.success("文件上传成功");
-          console.log("上传成功:", response.data);
-        })
-        .catch((error) => {
-          this.$message.error("文件上传失败");
-          console.error("上传失败:", error);
-        });
-    },
-    uploadFile(file) {
-      let formDataInfo = new FormData();
-      formDataInfo.append("file", file);
-      // loadConferenceFile(formDataInfo).then((res) => {
-      //     this.$message({
-      //       message: res.data,
-      //       type: "success",
-      //     });
-      // });
-      this.$api
-        .admin_user_upload(formDataInfo)
-        .then((response) => {
-          // 处理服务器的响应
-          console.log(response);
-        })
-        .catch((error) => {
-          // 处理错误
-          console.error("Error in admin_user_upload:", error);
-        });
+          .post("http://localhost:90/api/admin/user/upload", form, {
+            headers: {
+              // 'Content-Type': 'multipart/form-data', // 设置请求头，指定数据格式为 multipart/form-data
+              Authorization: `Bearer ${token}`,
+              // 如果需要认证或其他请求头，可以在这里添加
+            },
+            withCredentials: true,
+          })
+          .then((response) => {
+            this.$message.success("文件上传成功");
+            console.log("上传成功:", response.data);
+          })
+          .catch((error) => {
+            this.$message.error("文件上传失败");
+            console.error("上传失败:", error);
+          });
     },
 
     //添加或编辑信息确认

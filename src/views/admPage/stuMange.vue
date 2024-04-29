@@ -52,8 +52,8 @@
           :file-list="fileList"
           :show-file-list="false"
           class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-change="handleFileUpload"
+          action="#"
+          :http-request="upAndDownload"
           style="display: inline-block; margin-left: 10px"
         >
           <el-button size="big" type="primary">批量添加用户</el-button>
@@ -67,12 +67,12 @@
     >
       <el-table-column fixed prop="name" label="姓名" width="150">
       </el-table-column>
-      <el-table-column prop="major" label="专业" width="140"> </el-table-column>
+      <el-table-column prop="title" label="专业" width="140"> </el-table-column>
       <el-table-column prop="class" label="班级" width="140"> </el-table-column>
       <el-table-column prop="account" label="账号" width="160">
       </el-table-column>
-      <!-- <el-table-column prop="password" label="密码" width="160">
-      </el-table-column> -->
+      <el-table-column prop="password" label="密码" width="160">
+      </el-table-column>
       <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
           <el-button @click="handleDelete(scope.row)" type="text" size="small">
@@ -91,11 +91,36 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import axios from "axios";
 export default {
   created() {
     this.admin_user_get();
   },
   methods: {
+    upAndDownload(params){
+      let form = new FormData()
+      form.append('file', params.file)
+      const token = Cookies.get('token')
+      // alert(form)
+      axios
+          .post("http://localhost:90/api/admin/user/upload", form, {
+            headers: {
+              // 'Content-Type': 'multipart/form-data', // 设置请求头，指定数据格式为 multipart/form-data
+              Authorization: `Bearer ${token}`,
+              // 如果需要认证或其他请求头，可以在这里添加
+            },
+            withCredentials: true,
+          })
+          .then((response) => {
+            this.$message.success("文件上传成功");
+            console.log("上传成功:", response.data);
+          })
+          .catch((error) => {
+            this.$message.error("文件上传失败");
+            console.error("上传失败:", error);
+          });
+    },
     //添加或编辑信息确认
     submit() {
       this.$refs.form.validate((valid) => {
@@ -104,15 +129,10 @@ export default {
           if (this.modaltype === 0) {
             // 添加表单提交
             console.log(this.form);
-            this.$api.admin_user_post(null,this.form.account,this.form.password,this.form.name,"4",null,this.form.major,this.form.class);
-            // this.admin_user_get();
-            // location.reload();
             //关闭弹窗
             this.dialogFormVisible = false;
-            
           } else {
             //编辑表单提交
-            this.$api.admin_user_put(this.form.id,this.form.account,this.form.password,this.form.name,"4",null,this.form.major,this.form.class);
             console.log(this.form);
             //关闭弹窗
             this.dialogFormVisible = false;
@@ -128,9 +148,6 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.$api.admin_user_delete(row.id);
-          this.admin_user_get();
-          // location.reload();
           this.$message({
             type: "success",
             message: "删除成功!",
@@ -151,7 +168,6 @@ export default {
         type: "warning",
       })
         .then(() => {
-          this.$api.admin_reset(row.id);
           this.$message({
             type: "success",
             message: "重置成功!",
@@ -186,7 +202,6 @@ export default {
     adduser() {},
 
     handleFileUpload(file) {
-      
       this.$api
         .admin_user_upload(file.raw)
         .then((response) => {
@@ -208,10 +223,8 @@ export default {
 
           this.tableData = response.data.map((item) => ({
             name: item.name,
-            major: item.major,
-            class: item.classes,
-            account: item.username,
-            id:item.id,
+            address: item.username,
+            id: item.id,
           }));
           // alert(JSON.stringify(this.tableData))
           // 从后端获取实验室列表数据
@@ -242,9 +255,8 @@ export default {
 
           this.tableData = response.data.map((item) => ({
             name: item.name,
-            major: item.major,
-            account: item.username,
-            id:item.id,
+            address: item.username,
+            id: item.id,
           }));
           // alert(JSON.stringify(this.tableData))
           // 从后端获取实验室列表数据
@@ -309,22 +321,16 @@ export default {
         account: "",
         password: "",
       },
-
-      //文件
-      fileList: [
-        {
-          name: "food.jpeg",
-          url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
-        },
-      ],
+      limitNum: 1, // 上传excell时，同时允许上传的最大数
+      fileList: [], // excel文件列表
     };
   },
 };
 </script>
 <style lang="less" >
 .el-dialog__header {
-    height: 60px;
-    padding: 5px 5px 10px;
+  height: 60px;
+  padding: 5px 5px 10px;
 }
 .dialog-footer {
   height: 90px;

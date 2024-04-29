@@ -50,8 +50,8 @@
           :file-list="fileList"
           :show-file-list="false"
           class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-change="handleFileUpload"
+          action="#"
+          :http-request="upAndDownload"
           style="display: inline-block; margin-left: 10px"
         >
           <el-button size="big" type="primary">批量添加用户</el-button>
@@ -88,11 +88,36 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import axios from "axios";
 export default {
   created() {
     this.admin_user_get();
   },
   methods: {
+    upAndDownload(params){
+      let form = new FormData()
+      form.append('file', params.file)
+      const token = Cookies.get('token')
+      // alert(form)
+      axios
+          .post("http://localhost:90/api/admin/user/upload", form, {
+            headers: {
+              // 'Content-Type': 'multipart/form-data', // 设置请求头，指定数据格式为 multipart/form-data
+              Authorization: `Bearer ${token}`,
+              // 如果需要认证或其他请求头，可以在这里添加
+            },
+            withCredentials: true,
+          })
+          .then((response) => {
+            this.$message.success("文件上传成功");
+            console.log("上传成功:", response.data);
+          })
+          .catch((error) => {
+            this.$message.error("文件上传失败");
+            console.error("上传失败:", error);
+          });
+    },
     //添加或编辑信息确认
     submit() {
       this.$refs.form.validate((valid) => {
