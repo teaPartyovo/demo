@@ -45,14 +45,14 @@
                     v-for="item in labs"
                     :key="item.id"
                     :label="item.labName + '-' + item.labNumber"
-                    :value="item.labNumber"
+                    :value="item"
                   ></el-option>
                 </el-select>
               </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="dialogFormVisible = false"
+              <el-button type="primary" @click="dialogFormVisible = false, onSubmit()"
                 >确 定</el-button
               >
             </div>
@@ -68,17 +68,13 @@ export default {
   created() {
     this.get_admin_classes();
   },
-  methods: {
-    onSubmit() {
-      console.log("submit!");
-    },
-  },
   data() {
     return {
       labs: [], // 存储从后端获取的实验室列表数据
       form: {
         lab: "", // 用于存储选中的实验室值
       },
+      row_id : 0,
       tableData: [
         // {
         //   semester: "2023-1",
@@ -130,11 +126,18 @@ export default {
     };
   },
   methods: {
+    onSubmit() {
+      this.$api.admin_classes_put(this.row_id,this.form.lab.labNumber);
+      this.form.lab.status = 1;
+      this.get_admin_classes();
+      //location.reload();
+    },
     async fetchLabList(item) {
       //alert(item.id)
       try {
         // 调用后端接口获取实验室列表数据
         const id = item.id;
+        this.row_id = item.id;
         const response = await this.$api.admin_classes_id(item.id);
         // alert(JSON.stringify(response.data))
         // 处理后端返回的数据
