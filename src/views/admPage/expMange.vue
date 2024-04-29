@@ -1,5 +1,27 @@
 <template>
   <div class="expMange">
+    <el-dialog title="用户信息" :visible.sync="dialogFormVisible" width="35%" :before-close="handleClose">
+          <el-form :model="form"  :rules="rules" label-width="80px" ref="form">
+            <el-form-item label="姓名"  prop="name">
+              <el-input v-model="form.name"></el-input>
+            </el-form-item>
+            <el-form-item label="职称" prop="title">
+              <el-input v-model="form.title"></el-input>
+            </el-form-item>
+            <el-form-item label="账号" prop="account">
+              <el-input v-model="form.account" ></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+              <el-input v-model="form.password"></el-input>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="handleClose" >取 消</el-button>
+            <el-button type="primary" @click="submit"
+              >确 定</el-button
+            >
+          </div>
+    </el-dialog>
     <el-form :inline="true" :model="formInline" class="demo-form-inline" style="line-height: 20px; text-align: left;">
       <el-form-item >
         <el-input v-model="formInline.user" placeholder="查找姓名"></el-input>
@@ -9,25 +31,9 @@
           >查询</el-button>
 
         <!-- 新增用户 -->
-        <el-button type="primary" @click="dialogFormVisible = true"
+        <el-button type="primary" @click="handleAdd"
           >添加用户</el-button
         >
-        <el-dialog title="新增用户" :visible.sync="dialogFormVisible">
-          <el-form :model="form">
-            <el-form-item label="用户名" :label-width="formLabelWidth">
-              <el-input v-model="form.year" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="密码" :label-width="formLabelWidth">
-              <el-input v-model="form.weeks" autocomplete="off"></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormVisible = false"
-              >确 定</el-button
-            >
-          </div>
-        </el-dialog>
         <!-- 新增用户 -->
 
         <!-- 批量添加用户 -->
@@ -49,22 +55,25 @@
       style="width: 100%; line-height: 60px"
       max-height="600"
     >
-      <el-table-column fixed prop="name" label="姓名" width="300">
+      <el-table-column fixed prop="name" label="姓名" width="200">
       </el-table-column>
-      <el-table-column prop="address" label="账号" width="300">
+      <el-table-column prop="title" label="职称" width="120"> 
       </el-table-column>
-      <!-- <el-table-column prop="zip" label="密码" width="120"> </el-table-column> -->
+      <el-table-column prop="account" label="账号" width="200">
+      </el-table-column>
+      <el-table-column prop="password" label="密码" width="120"> 
+      </el-table-column>
       <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
           <el-button
-            @click.native.prevent="deleteRow(scope.$index, tableData)"
+           @click="handleDelete(scope.row)"
             type="text"
             size="small"
           >
             删除
           </el-button>
-          <el-button type="text" size="small">修改</el-button>
-          <el-button type="text" size="small">重置密码</el-button>
+          <el-button type="text" size="small" @click="handleEdit(scope.row)">修改</el-button>
+          <el-button type="text" size="small" @click="handleReset(scope.row)">重置密码</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -78,6 +87,76 @@ export default {
       this.admin_user_get();
   },
   methods: {
+    //添加或编辑信息确认
+    submit() {
+      this.$refs.form.validate((valid) => {
+        if(valid) {//通过表单验证
+          if(this.modaltype === 0) { // 添加表单提交
+            console.log(this.form) 
+            //关闭弹窗
+            this.dialogFormVisible = false
+          }else{ //编辑表单提交
+            console.log(this.form) 
+            //关闭弹窗
+            this.dialogFormVisible = false
+          }
+          
+        }
+      })
+    },
+    //删除
+    handleDelete(row) {
+        this.$confirm('此操作将永久删除该账户信息, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+    },
+    //重置密码
+    handleReset(row) {
+        this.$confirm('是否确定重置该用户密码', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '重置成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消重置'
+          });          
+        });
+    },
+    //添加用户
+    handleAdd() {
+      this.modaltype = 0
+      this.dialogFormVisible = true;
+    },
+    handleClose() {
+      this.$refs.form.resetFields();
+      this.dialogFormVisible = false;
+    },
+    handleEdit(row) {
+      this.modaltype = 1
+      this.dialogFormVisible = true;
+      // this.row_id = row.id;
+      // this.id=row.id
+      // 要对当前行数据进行深拷贝
+      this.form = JSON.parse(JSON.stringify(row));
+    },
     handleFileUpload(file) {
     this.$api.admin_user_upload(file.raw)
       .then(response => {
@@ -151,12 +230,31 @@ export default {
   },
   data() {
     return {
+      //校验规则
+      rules: {
+        name: [
+          { required: true, message: '请输入姓名' }
+        ],
+        title: [
+          { required: true, message: '请输入职称' }
+        ],
+        account: [
+          { required: true, message: '请输入账号' }
+        ],
+        password: [
+          { required: true, message: '请输入密码' }
+        ],
+      },
+
+      modaltype: 0, //0表示添加 1表示编辑
+
       users: [], // 用于存储后端返回的数据
       tableData: [
         // {
         //   name: "王实验员",
-        //   address: 202121210000,
-        //   zip: 200333,
+        //   title:"高级",
+        //   account: 202121210000,
+        //   password: 200333,
         // },
         // {
         //   name: "王实验员",
@@ -186,10 +284,11 @@ export default {
       // 新增用户数据
       dialogFormVisible: false,
       form: {
-        username: "",
+        name: "",
+        title: "",
+        account: "",
         password: "",
       },
-      formLabelWidth: "120px",
 
       //文件
       fileList: [{
@@ -200,8 +299,15 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped>
-.el-main[data-v-54c38a05] {
-  line-height: 100px;
+<style lang="less" >
+.el-dialog__header {
+    height: 60px;
+    padding: 5px 5px 10px;
+}
+.dialog-footer {
+  height: 90px;
+}
+.el-dialog__body {
+  padding-bottom: 0;
 }
 </style>

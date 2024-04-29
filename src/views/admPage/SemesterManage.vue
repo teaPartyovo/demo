@@ -96,47 +96,47 @@ export default {
 
 methods: {
   async handleSelectChange(selectedValue) {
-  try {
-    console.log('选中的值:', selectedValue);
+    try {
+      console.log('选中的值:', selectedValue);
+      // 解析选中的值，假设 selectedValue 格式为 'YYYY-M'，如 '2023-2024-9' 或 '2023-3'
+      const [yearStr, yearStr2, seasonStr] = selectedValue.split('-');
 
-    // 解析选中的值，假设 selectedValue 格式为 'YYYY-M'，如 '2023-9' 或 '2023-3'
-    const [yearStr, seasonStr] = selectedValue.split('-');
-    const year = parseInt(yearStr); // 将年份转换为数字
-    const season = seasonStr === '9' ? 1 : seasonStr === '3' ? 2 : null; // 解析季节
+      const year = parseInt(yearStr); // 将年份转换为数字
+      const season = seasonStr === '1' ? 1 : seasonStr === '2' ? 2 : null; // 解析季节
 
-    if (year && season) {
-      // 构造请求数据
-      const requestData = {
-        year: year,
-        season: season,
-        weeks: null // 如果需要传递周数，可以在此设置
-      };
+      if (year && season) {
+        // 构造请求数据
+        const requestData = {
+          year: year,
+          season: season,
+          weeks: null // 如果需要传递周数，可以在此设置
+        };
 
-      // 调用后端接口 admin_semester_id，传递 year 和 season 参数
-      const response = await this.$api.admin_semester_id(year, season);
+        // 调用后端接口 admin_semester_id，传递 year 和 season 参数
+        const response = await this.$api.admin_semester_id(year, season);
 
-      // 处理后端返回的数据
-      if (response.code === 1) {
-        console.log('学期设置成功！', response.message);
-        alert("设置成功");
-        // 可选：根据需要处理返回的数据
-        if (response.data) {
-          // 处理返回的数据 response.data
+        // 处理后端返回的数据
+        if (response.code === 1) {
+          console.log('学期设置成功！', response.message);
+          alert("设置成功");
+          // 可选：根据需要处理返回的数据
+          if (response.data) {
+            // 处理返回的数据 response.data
+          }
+        } else if (response.code === 0) {
+          console.error('学期设置失败：', response.message);
+          // 可选：向用户显示失败消息
+        } else {
+          console.error('未知状态码：', response.code);
+          // 可选：向用户显示错误消息
         }
-      } else if (response.code === 0) {
-        console.error('学期设置失败：', response.message);
-        // 可选：向用户显示失败消息
       } else {
-        console.error('未知状态码：', response.code);
-        // 可选：向用户显示错误消息
+        console.error('无效的选中值:', selectedValue);
       }
-    } else {
-      console.error('无效的选中值:', selectedValue);
+    } catch (error) {
+      console.error('设置学期出错：', error);
+      // 可选：向用户显示错误消息
     }
-  } catch (error) {
-    console.error('设置学期出错：', error);
-    // 可选：向用户显示错误消息
-  }
 },
 
 
@@ -154,7 +154,7 @@ methods: {
           // 处理 API 返回的数据，转换成需要的 tableData 结构
           this.tableData = response.data.map(item => {
             let seasonName = item.season === 1 ? "秋季" : "春季";
-            let date = item.season === 1 ? `${item.year}-9` : `${item.year}-3`;
+            let date = item.season === 1 ? `${item.year}-${item.year+1}-1` : `${item.year}-${item.year+1}-2`;
             let address = item.weeks.toString();
 
             return {
@@ -173,19 +173,20 @@ methods: {
     try {
       // 准备要发送的数据
       const requestData = {
+        id: null,
         year: this.form.year,
         season: parseInt(this.form.season), // 转换为数字
         weeks: parseInt(this.form.weeks) // 转换为数字
       };
       // 调用 $api.admin_semester_post 发送 POST 请求
-      const response = await this.$api.admin_semester_post(requestData);
+      const response = await this.$api.admin_semester_post(this.form.year, parseInt(this.form.season), parseInt(this.form.weeks));
       // 处理成功响应（例如显示成功消息）
       console.log('学期添加成功！', response);
       // 可选：重置表单或关闭对话框
       this.dialogFormVisible = false;
       this.resetForm(); // 定义 resetForm() 方法来重置表单字段
       // 在添加学期后重新获取数据，更新表格
-      his.settableData();
+      this.settableData();
     } catch (error) {
       // 处理错误（例如显示错误消息）
       console.error('添加学期出错：', error);

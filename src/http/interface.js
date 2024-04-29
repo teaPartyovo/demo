@@ -9,7 +9,7 @@ import axios from './axios'
 // 登陆接口
 export const login = (username, password) => {
     return axios({
-        url: '/login_mock',
+        url: '/login',
         method: 'get',
         params: { username, password }
     })
@@ -27,7 +27,7 @@ export const login = (username, password) => {
 //获取当前学期数据
 export const common_semester = () => {
     return axios({
-        url: '/common/semester_mock',
+        url: '/common/semester',
         method: 'get'
     })
 }
@@ -187,11 +187,11 @@ export const teacher_device_get = data => {
 //     }
 //   };
 // body
-export const admin_semester_post = (requestData) => {
+export const admin_semester_post = (year, season, weeks) => {
     return axios({
         url: '/admin/semester',
         method: 'post', 
-        data: {requestData} ,
+        data: {year, season, weeks} ,
     })
 }
 
@@ -208,7 +208,7 @@ export const admin_semester_get = data => {
 export const admin_semester_id = (year,season) => {
     return axios({
         url: '/admin/semester',
-        method: 'get',
+        method: 'put',
         params: {year,season}
     })
 }
