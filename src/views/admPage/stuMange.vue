@@ -67,7 +67,7 @@
     >
       <el-table-column fixed prop="name" label="姓名" width="150">
       </el-table-column>
-      <el-table-column prop="title" label="专业" width="140"> </el-table-column>
+      <el-table-column prop="major" label="专业" width="140"> </el-table-column>
       <el-table-column prop="class" label="班级" width="140"> </el-table-column>
       <el-table-column prop="account" label="账号" width="160">
       </el-table-column>
@@ -112,6 +112,7 @@ export default {
             
           } else {
             //编辑表单提交
+            this.$api.admin_user_put(this.form.id,this.form.account,this.form.password,this.form.name,"4",null,this.form.major,this.form.class);
             console.log(this.form);
             //关闭弹窗
             this.dialogFormVisible = false;
@@ -127,6 +128,9 @@ export default {
         type: "warning",
       })
         .then(() => {
+          this.$api.admin_user_delete(row.id);
+          this.admin_user_get();
+          // location.reload();
           this.$message({
             type: "success",
             message: "删除成功!",
@@ -147,6 +151,7 @@ export default {
         type: "warning",
       })
         .then(() => {
+          this.$api.admin_reset(row.id);
           this.$message({
             type: "success",
             message: "重置成功!",
@@ -202,9 +207,10 @@ export default {
 
           this.tableData = response.data.map((item) => ({
             name: item.name,
-            title: item.major,
+            major: item.major,
             class: item.classes,
             account: item.username,
+            id:item.id,
           }));
           // alert(JSON.stringify(this.tableData))
           // 从后端获取实验室列表数据
@@ -235,8 +241,9 @@ export default {
 
           this.tableData = response.data.map((item) => ({
             name: item.name,
-            title: item.title,
+            major: item.major,
             account: item.username,
+            id:item.id,
           }));
           // alert(JSON.stringify(this.tableData))
           // 从后端获取实验室列表数据
