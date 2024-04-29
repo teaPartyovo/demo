@@ -108,8 +108,8 @@ export default {
         .admin_loan_put(id, status)
         .then((response) => {
           this.flag = false;
-          // location.reload();
-          this.get_admin_classes();
+          location.reload();
+          // this.$forceUpdate();
           if (response && response.data && response.data.code === 0) {
             // 处理 PUT 接口返回的数据
             console.log(response.data.message);
@@ -141,6 +141,7 @@ export default {
           // 从后端获取实验室列表数据
 
           console.log("成功从后端获取数据：", this.tableData);
+          
         } else {
           console.error("从后端获取的数据格式不正确：", response.data);
         }

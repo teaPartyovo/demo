@@ -311,6 +311,7 @@ export default {
       this.form = JSON.parse(JSON.stringify(row));
     },
     handleDelete(row) {
+      alert(1)
       this.$api
         .student_loan_id(row.id)
         .then((result) => {
