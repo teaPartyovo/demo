@@ -273,7 +273,7 @@ export const admin_user_upload = (file) => {
 export const admin_classes_id = (id) => {
     
     return axios({
-        url: `/admin/fuck/${id}`,
+        url: `/admin/classes/${id}`,
         //url: '/admin/classes/${id}', // 使用反引号和 ${} 来插入变量
         method: 'get'
     })
@@ -312,7 +312,7 @@ export const admin_loan_put = (id, status) => {
     return axios({
         url: '/admin/loan',
         method: 'put',
-        params: { id, password }
+        params: { id, status }
     })
 }
 

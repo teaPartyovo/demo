@@ -8,7 +8,7 @@
     >
       <el-table-column fixed prop="semester" label="学期" width="120">
       </el-table-column>
-      <el-table-column prop="labType" label="实验室名称" width="150">
+      <el-table-column prop="labType" label="实验室类型" width="150">
       </el-table-column>
       <!-- <el-table-column prop="labID" label="实验室编号" width="120">
       </el-table-column> -->

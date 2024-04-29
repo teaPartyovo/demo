@@ -21,27 +21,54 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="150">
         <template v-slot="scope">
-          <el-button type="text" size="small" v-if="scope.row.status==2" disabled
-            >已通过</el-button>
-            <el-button type="text" size="small" v-else-if="scope.row.status==3" disabled
-            >已驳回</el-button>
-            <el-button type="text" size="small" v-else-if="scope.row.status==4" disabled
-            >使用完毕</el-button>
-          <el-button type="text" size="small" v-else @click="dialogFormVisible = true"  >待审核</el-button>
-          <el-dialog title="审核" :visible.sync="dialogFormVisible" append-to-body>
-  <el-form :model="form">
-    <el-form-item label="审核" :label-width="formLabelWidth">
-      <el-select v-model="form.lab" placeholder="请选择">
-        <el-option label="通过" value="2"></el-option>
-        <el-option label="不通过" value="3"></el-option>
-      </el-select>
-    </el-form-item>
-  </el-form>
-  <div slot="footer" class="dialog-footer">
-    <el-button @click="dialogFormVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogFormVisible = false, Confirmbutton(scope.row.id)">确 定</el-button>
-  </div>
-</el-dialog>
+          <el-button
+            type="text"
+            size="small"
+            v-if="scope.row.status == 2"
+            disabled
+            >已通过</el-button
+          >
+          <el-button
+            type="text"
+            size="small"
+            v-else-if="scope.row.status == 3"
+            disabled
+            >已驳回</el-button
+          >
+          <el-button
+            type="text"
+            size="small"
+            v-else-if="scope.row.status == 4"
+            disabled
+            >使用完毕</el-button
+          >
+          <el-button
+            type="text"
+            size="small"
+            v-else
+            @click="dialogFormVisible = true, get_row_id(scope.row.id)"
+            >待审核</el-button
+          >
+          <el-dialog
+            title="审核"
+            :visible.sync="dialogFormVisible"
+            append-to-body
+          >
+            <el-form :model="form">
+              <el-form-item label="审核" :label-width="formLabelWidth">
+                <el-select v-model="form.lab" placeholder="请选择">
+                  <el-option label="通过" value="2"></el-option>
+                  <el-option label="不通过" value="3"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+              <el-button @click="dialogFormVisible = false">取 消</el-button>
+              <el-button type="primary" @click="dialogFormVisible = flag, Confirmbutton(row_id)"
+                >确 定</el-button
+              >
+            </div>
+          </el-dialog>
         </template>
       </el-table-column>
     </el-table>
@@ -49,14 +76,23 @@
 </template>
 
 <script>
+import router from '@/router';
 export default {
-  created()
-  {
-      this.get_admin_classes();
+  data() {
+    return{
+      flag : false,
+      row_id : 0
+    }
+  },
+  created() {
+    this.get_admin_classes();
   },
   methods: {
     onSubmit() {
       console.log("submit!");
+    },
+    get_row_id(id) {
+      this.row_id = id;
     },
     // 确认审核
     async Confirmbutton(id) {
@@ -65,49 +101,54 @@ export default {
       const status = this.form.lab;
       if (!this.form.lab) {
         alert("没有选择是否通过审核");
+        this.flag = true;
         return;
       }
-      const response = await this.$api.admin_loan_put(id, status);
-      if (response && response.data && response.data.code === 0) {
-       // 处理 PUT 接口返回的数据
-       console.log(response.data.message);
-     }
+      const response = await this.$api
+        .admin_loan_put(id, status)
+        .then((response) => {
+          this.flag = false;
+          // location.reload();
+          this.get_admin_classes();
+          if (response && response.data && response.data.code === 0) {
+            // 处理 PUT 接口返回的数据
+            console.log(response.data.message);
+          }
+        });
     },
     // 从后端获取实验室列表数据
     async get_admin_classes() {
-    try {
-      // 调用后端接口获取数据
-      const response = await this.$api.admin_loan_get();
-      
-      // 处理后端返回的数据
-      if (response.data && Array.isArray(response.data)) {
-        // 将后端返回的数据保存到前端的 tableData 中
-        
-        this.tableData = response.data.map(item => (
-          {
-          labType: item.labNumber,
-          labID: item.abNumber,
-          weeks: item.weekNumber,
-          sessionNumber: item.sessionNumber,
-          applicationReason: item.applicationReason,
-          stuName: item.studentId,
+      try {
+        // 调用后端接口获取数据
+        const response = await this.$api.admin_loan_get();
 
-          status: item.status,
-          id: item.id,
+        // 处理后端返回的数据
+        if (response.data && Array.isArray(response.data)) {
+          // 将后端返回的数据保存到前端的 tableData 中
+
+          this.tableData = response.data.map((item) => ({
+            labType: item.labNumber,
+            labID: item.abNumber,
+            weeks: item.weekNumber,
+            sessionNumber: item.sessionNumber,
+            applicationReason: item.applicationReason,
+            stuName: item.studentId,
+
+            status: item.status,
+            id: item.id,
+          }));
+          // alert(JSON.stringify(this.tableData))
+          // 从后端获取实验室列表数据
+
+          console.log("成功从后端获取数据：", this.tableData);
+        } else {
+          console.error("从后端获取的数据格式不正确：", response.data);
         }
-      ));
-        // alert(JSON.stringify(this.tableData))
-        // 从后端获取实验室列表数据
-
-        console.log('成功从后端获取数据：', this.tableData);
-      } else {
-        console.error('从后端获取的数据格式不正确：', response.data);
+      } catch (error) {
+        console.error("从后端获取数据出错：", error);
+        // 可选：向用户显示错误消息
       }
-    } catch (error) {
-      console.error('从后端获取数据出错：', error);
-      // 可选：向用户显示错误消息
-    }
-  },
+    },
   },
   data() {
     return {
@@ -163,10 +204,10 @@ export default {
 
       //安排实验室表单
       dialogFormVisible: false,
-        form: {
-          lab:''
-        },
-        formLabelWidth: '120px'
+      form: {
+        lab: "",
+      },
+      formLabelWidth: "120px",
     };
   },
 };
