@@ -290,9 +290,11 @@ export default {
         row.fifth = "";
         row.sixth = "";
       });
+      const match = week.match(/\d+/);
       // alert(this.colFields.length);
+      //将week从string转为int
       this.$api
-        .common_class(week)
+        .common_class(match[0])
         .then((result) => {
           result.data.forEach((item) => {
             const labNumber = item.labNumber;
