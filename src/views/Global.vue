@@ -1,5 +1,5 @@
 <script>
-var userName='123'
+var userName=''
 export default
 {
     userName

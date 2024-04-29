@@ -93,6 +93,7 @@ export default {
         if(valid) {//通过表单验证
           if(this.modaltype === 0) { // 添加表单提交
             console.log(this.form) 
+            this.$api.admin_user_post(null,this.form.account,this.form.password,this.form.name,"2",this.form.title,null,null);
             //关闭弹窗
             this.dialogFormVisible = false
           }else{ //编辑表单提交
