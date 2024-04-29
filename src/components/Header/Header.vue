@@ -27,13 +27,23 @@ export default {
     data() {
       return {
         centerDialogVisible: false,
-        userName:global.userName
+        userName: ''
       };
     },
     methods:{
       quit(){
         router.replace('/');
+      },
+      rename(){
+        this.$api.common_user().then((result) => {
+            this.userName = result.data.name;
+          }).catch((err) => {
+              console.log(err);
+          });
       }
+    },
+    created() {
+      this.rename();
     }
 };
 </script>

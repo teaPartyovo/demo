@@ -47,7 +47,14 @@ export const common_class = week => {
         params: {week}
     })
 }
-
+//获取当前登陆用户
+export const common_user = data =>{
+    return axios({
+        url: '/common/user',
+        method: 'get',
+        data
+    })
+}
 //学生接口
 //借用实验室
 export const student_loan_post = (weekNumber,sessionNumber,labNumber,applicationReason) => {
@@ -321,6 +328,7 @@ export default {
     common_semester,
     common_laboratory,
     common_class,
+    common_user,
     student_loan_post,
     student_loan_get,
     student_loan_put,
