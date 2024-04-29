@@ -52,8 +52,6 @@ export default {
           //alert(res.data.token);
           // alert(res.data.role);
           Cookies.set('token',res.data.token);
-          this.$api.
-          global.userName=name;
           if(res.data.role == 1){
             router.replace('/admin');
           }
