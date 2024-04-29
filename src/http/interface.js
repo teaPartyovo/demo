@@ -136,11 +136,11 @@ export const teacher_experiment_get = data => {
 }
 
 //修改未排课的申请
-export const teacher_experiment_put = (id, courseName,labType,studentClass,studentCount,startWeek,endWeek,sessionNumber) => {
+export const teacher_experiment_put = (id,courseName,labType,studentClass,studentCount,startWeek,endWeek,sessionNumber) => {
     return axios({
         url: '/teacher/experiment',
         method: 'put',
-        data: {id, courseName,labType,studentClass,studentCount,startWeek,endWeek,sessionNumber}
+        data: {id,courseName,labType,studentClass,studentCount,startWeek,endWeek,sessionNumber}
     })
 }
 
@@ -187,11 +187,11 @@ export const teacher_device_get = data => {
 //     }
 //   };
 // body
-export const admin_semester_post = (year, season, weeks) => {
+export const admin_semester_post = (requestData) => {
     return axios({
         url: '/admin/semester',
         method: 'post', 
-        data: {year, season, weeks} ,
+        data: {requestData} ,
     })
 }
 
@@ -208,7 +208,7 @@ export const admin_semester_get = data => {
 export const admin_semester_id = (year,season) => {
     return axios({
         url: '/admin/semester',
-        method: 'put',
+        method: 'get',
         params: {year,season}
     })
 }
@@ -289,11 +289,11 @@ export const admin_classes_get = data => {
 }
 
 //完成排课
-export const admin_classes_put = data => {
+export const admin_classes_put = (registrationId,labId) => {
     return axios({
         url: '/admin/classes',
         method: 'put',
-        data
+        params: {registrationId,labId}
     })
 }
 
@@ -312,7 +312,7 @@ export const admin_loan_put = (id, status) => {
     return axios({
         url: '/admin/loan',
         method: 'put',
-        params: { id, status }
+        params: { id, password }
     })
 }
 
