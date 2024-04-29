@@ -1,53 +1,61 @@
 <template>
   <div class="expMange">
-    <el-dialog title="用户信息" :visible.sync="dialogFormVisible" width="35%" :before-close="handleClose">
-          <el-form :model="form"  :rules="rules" label-width="80px" ref="form">
-            <el-form-item label="姓名"  prop="name">
-              <el-input v-model="form.name"></el-input>
-            </el-form-item>
-            <el-form-item label="职称" prop="title">
-              <el-input v-model="form.title"></el-input>
-            </el-form-item>
-            <el-form-item label="账号" prop="account">
-              <el-input v-model="form.account" ></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="password">
-              <el-input v-model="form.password"></el-input>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="handleClose" >取 消</el-button>
-            <el-button type="primary" @click="submit"
-              >确 定</el-button
-            >
-          </div>
+    <el-dialog
+      title="用户信息"
+      :visible.sync="dialogFormVisible"
+      width="35%"
+      :before-close="handleClose"
+    >
+      <el-form :model="form" :rules="rules" label-width="80px" ref="form">
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="职称" prop="title">
+          <el-input v-model="form.title"></el-input>
+        </el-form-item>
+        <el-form-item label="账号" prop="account">
+          <el-input v-model="form.account"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="form.password"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="handleClose">取 消</el-button>
+        <el-button type="primary" @click="submit">确 定</el-button>
+      </div>
     </el-dialog>
-    <el-form :inline="true" :model="formInline" class="demo-form-inline" style="line-height: 20px; text-align: left;">
-      <el-form-item >
+    <el-form
+      :inline="true"
+      :model="formInline"
+      class="demo-form-inline"
+      style="line-height: 20px; text-align: left"
+    >
+      <el-form-item>
         <el-input v-model="formInline.user" placeholder="查找姓名"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" style="margin-right: 580px" @click="onSubmit"
-          >查询</el-button>
+          >查询</el-button
+        >
 
         <!-- 新增用户 -->
-        <el-button type="primary" @click="handleAdd"
-          >添加用户</el-button
-        >
+        <el-button type="primary" @click="handleAdd">添加用户</el-button>
         <!-- 新增用户 -->
 
         <!-- 批量添加用户 -->
-        <el-upload
-          accept=".xlsx,.xls"
-          :file-list="fileList"
-          :show-file-list="false"
-          class="upload-demo"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :on-change="handleFileUpload"
-          style="display: inline-block; margin-left: 10px;"
+        <input
+          type="file"
+          ref="fileInput"
+          style="display: none"
+          @change="handleFileChange"
+        />
+        <el-button size="big" type="primary" @click="openFileInput"
+          >选择文件</el-button
         >
-          <el-button size="big" type="primary">上传添加批量用户</el-button>
-        </el-upload>
+        <el-button size="big" type="success" @click="uploadFile" enctype="multipart/form-data"
+          >上传文件</el-button
+        >
       </el-form-item>
     </el-form>
     <el-table
@@ -57,23 +65,22 @@
     >
       <el-table-column fixed prop="name" label="姓名" width="200">
       </el-table-column>
-      <el-table-column prop="title" label="职称" width="120"> 
-      </el-table-column>
+      <el-table-column prop="title" label="职称" width="120"> </el-table-column>
       <el-table-column prop="account" label="账号" width="200">
       </el-table-column>
-      <el-table-column prop="password" label="密码" width="120"> 
+      <el-table-column prop="password" label="密码" width="120">
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
-          <el-button
-           @click="handleDelete(scope.row)"
-            type="text"
-            size="small"
-          >
+          <el-button @click="handleDelete(scope.row)" type="text" size="small">
             删除
           </el-button>
-          <el-button type="text" size="small" @click="handleEdit(scope.row)">修改</el-button>
-          <el-button type="text" size="small" @click="handleReset(scope.row)">重置密码</el-button>
+          <el-button type="text" size="small" @click="handleEdit(scope.row)"
+            >修改</el-button
+          >
+          <el-button type="text" size="small" @click="handleReset(scope.row)"
+            >重置密码</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -81,69 +88,147 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
 export default {
-  created()
-  {
-      this.admin_user_get();
+  created() {
+    this.admin_user_get();
+  },
+  data() {
+    return {
+      file: null, // 保存选择的文件对象
+    };
   },
   methods: {
+    openFileInput() {
+      // 打开文件选择对话框
+      this.$refs.fileInput.click();
+    },
+    handleFileChange(event) {
+      // 处理文件选择变化事件
+      this.file = event.target.files[0];
+    },
+    uploadFile() {
+      if (!this.file) {
+        this.$message.error("请先选择文件");
+        return;
+      }
+
+      // 创建 FormData 对象，用于构建 multipart/form-data 格式的数据
+      const formData = new FormData();
+      formData.append("file", this.file); // 添加文件到 FormData 对象
+      const token = Cookies.get('token')
+      // 发送 POST 请求，上传文件到后端接口
+      axios
+        .post("http://localhost:90/api/admin/user/upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data", // 设置请求头，指定数据格式为 multipart/form-data
+            "Authorization": `Bearer ${token}`
+            // 如果需要认证或其他请求头，可以在这里添加
+          },
+          withCredentials: true
+        })
+        .then((response) => {
+          this.$message.success("文件上传成功");
+          console.log("上传成功:", response.data);
+        })
+        .catch((error) => {
+          this.$message.error("文件上传失败");
+          console.error("上传失败:", error);
+        });
+    },
+    uploadFile(file) {
+      let formDataInfo = new FormData();
+      formDataInfo.append("file", file);
+      // loadConferenceFile(formDataInfo).then((res) => {
+      //     this.$message({
+      //       message: res.data,
+      //       type: "success",
+      //     });
+      // });
+      this.$api
+        .admin_user_upload(formDataInfo)
+        .then((response) => {
+          // 处理服务器的响应
+          console.log(response);
+        })
+        .catch((error) => {
+          // 处理错误
+          console.error("Error in admin_user_upload:", error);
+        });
+    },
+
     //添加或编辑信息确认
     submit() {
       this.$refs.form.validate((valid) => {
-        if(valid) {//通过表单验证
-          if(this.modaltype === 0) { // 添加表单提交
-            console.log(this.form) 
-            this.$api.admin_user_post(null,this.form.account,this.form.password,this.form.name,"2",this.form.title,null,null);
+        if (valid) {
+          //通过表单验证
+          if (this.modaltype === 0) {
+            // 添加表单提交
+            console.log(this.form);
+            this.$api.admin_user_post(
+              null,
+              this.form.account,
+              this.form.password,
+              this.form.name,
+              "2",
+              this.form.title,
+              null,
+              null
+            );
             //关闭弹窗
-            this.dialogFormVisible = false
-          }else{ //编辑表单提交
-            console.log(this.form) 
+            this.dialogFormVisible = false;
+          } else {
+            //编辑表单提交
+            console.log(this.form);
             //关闭弹窗
-            this.dialogFormVisible = false
+            this.dialogFormVisible = false;
           }
-          
         }
-      })
+      });
     },
     //删除
     handleDelete(row) {
-        this.$confirm('此操作将永久删除该账户信息, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.$confirm("此操作将永久删除该账户信息, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
           this.$message({
-            type: 'success',
-            message: '删除成功!'
+            type: "success",
+            message: "删除成功!",
           });
-        }).catch(() => {
+        })
+        .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
+            type: "info",
+            message: "已取消删除",
+          });
         });
     },
     //重置密码
     handleReset(row) {
-        this.$confirm('是否确定重置该用户密码', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
+      this.$confirm("是否确定重置该用户密码", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
           this.$message({
-            type: 'success',
-            message: '重置成功!'
+            type: "success",
+            message: "重置成功!",
           });
-        }).catch(() => {
+        })
+        .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消重置'
-          });          
+            type: "info",
+            message: "已取消重置",
+          });
         });
     },
     //添加用户
     handleAdd() {
-      this.modaltype = 0
+      this.modaltype = 0;
       this.dialogFormVisible = true;
     },
     handleClose() {
@@ -151,7 +236,7 @@ export default {
       this.dialogFormVisible = false;
     },
     handleEdit(row) {
-      this.modaltype = 1
+      this.modaltype = 1;
       this.dialogFormVisible = true;
       // this.row_id = row.id;
       // this.id=row.id
@@ -159,40 +244,44 @@ export default {
       this.form = JSON.parse(JSON.stringify(row));
     },
     handleFileUpload(file) {
-    this.$api.admin_user_upload(file.raw)
-      .then(response => {
-        // 处理服务器的响应
-        console.log(response);
-      })
-      .catch(error => {
-        // 处理错误
-        console.error('Error in admin_user_upload:', error);
-      });
-     },
+      console.log("上传的文件:", file);
+      let formData = new FormData();
+      alert(1);
+      formData.append("file", file);
+      alert(1);
+      this.$api
+        .admin_user_upload(formData)
+        .then((response) => {
+          // 处理服务器的响应
+          console.log(response);
+        })
+        .catch((error) => {
+          // 处理错误
+          console.error("Error in admin_user_upload:", error);
+        });
+    },
     async admin_user_get() {
       try {
-        const response = await this.$api.admin_user_get(2, 1, 100000,null);
+        const response = await this.$api.admin_user_get(2, 1, 100000, null);
         //alert(JSON.stringify(response));
         if (response.data && Array.isArray(response.data)) {
-        // 将后端返回的数据保存到前端的 tableData 中
-        
-        this.tableData = response.data.map(item => (
-          {
+          // 将后端返回的数据保存到前端的 tableData 中
+
+          this.tableData = response.data.map((item) => ({
             name: item.name,
             address: item.username,
             id: item.id,
-        }
-      ));
-        // alert(JSON.stringify(this.tableData))
-        // 从后端获取实验室列表数据
+          }));
+          // alert(JSON.stringify(this.tableData))
+          // 从后端获取实验室列表数据
 
-        console.log('成功从后端获取数据：', this.tableData);
-      } else {
-        console.error('从后端获取的数据格式不正确：', response.data);
+          console.log("成功从后端获取数据：", this.tableData);
+        } else {
+          console.error("从后端获取的数据格式不正确：", response.data);
+        }
+      } catch (error) {
+        console.error("Error in admin_user_get:", error);
       }
-       } catch (error) {
-        console.error('Error in admin_user_get:', error);
-   }
     },
     deleteRow(index, rows) {
       rows.splice(index, 1);
@@ -200,51 +289,46 @@ export default {
     //查询
     async onSubmit() {
       try {
-        const response = await this.$api.admin_user_get(2, 1, 100000,this.formInline.user);
+        const response = await this.$api.admin_user_get(
+          2,
+          1,
+          100000,
+          this.formInline.user
+        );
         //alert(JSON.stringify(response));
         if (response.data && Array.isArray(response.data)) {
-        // 将后端返回的数据保存到前端的 tableData 中
-        
-        this.tableData = response.data.map(item => (
-          {
+          // 将后端返回的数据保存到前端的 tableData 中
+
+          this.tableData = response.data.map((item) => ({
             name: item.name,
             address: item.username,
             id: item.id,
-        }
-      ));
-        // alert(JSON.stringify(this.tableData))
-        // 从后端获取实验室列表数据
+          }));
+          // alert(JSON.stringify(this.tableData))
+          // 从后端获取实验室列表数据
 
-        console.log('成功从后端获取数据：', this.tableData);
-      } else {
-        console.error('从后端获取的数据格式不正确：', response.data);
+          console.log("成功从后端获取数据：", this.tableData);
+        } else {
+          console.error("从后端获取的数据格式不正确：", response.data);
+        }
+      } catch (error) {
+        console.error("Error in admin_user_get:", error);
       }
-       } catch (error) {
-        console.error('Error in admin_user_get:', error);
-   }
     },
 
     //文件
     handleChange(file, fileList) {
-        this.fileList = fileList.slice(-3);
-    }
+      this.fileList = fileList.slice(-3);
+    },
   },
   data() {
     return {
       //校验规则
       rules: {
-        name: [
-          { required: true, message: '请输入姓名' }
-        ],
-        title: [
-          { required: true, message: '请输入职称' }
-        ],
-        account: [
-          { required: true, message: '请输入账号' }
-        ],
-        password: [
-          { required: true, message: '请输入密码' }
-        ],
+        name: [{ required: true, message: "请输入姓名" }],
+        title: [{ required: true, message: "请输入职称" }],
+        account: [{ required: true, message: "请输入账号" }],
+        password: [{ required: true, message: "请输入密码" }],
       },
 
       modaltype: 0, //0表示添加 1表示编辑
@@ -292,18 +376,20 @@ export default {
       },
 
       //文件
-      fileList: [{
-          name: 'food.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }]
+      fileList: [
+        {
+          name: "food.jpeg",
+          url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100",
+        },
+      ],
     };
   },
 };
 </script>
 <style lang="less" >
 .el-dialog__header {
-    height: 60px;
-    padding: 5px 5px 10px;
+  height: 60px;
+  padding: 5px 5px 10px;
 }
 .dialog-footer {
   height: 90px;

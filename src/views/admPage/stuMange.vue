@@ -56,7 +56,7 @@
           :on-change="handleFileUpload"
           style="display: inline-block; margin-left: 10px"
         >
-          <el-button size="big" type="primary">上传添加批量用户</el-button>
+          <el-button size="big" type="primary">批量添加用户</el-button>
         </el-upload>
       </el-form-item>
     </el-form>
@@ -177,6 +177,7 @@ export default {
     adduser() {},
 
     handleFileUpload(file) {
+      
       this.$api
         .admin_user_upload(file.raw)
         .then((response) => {

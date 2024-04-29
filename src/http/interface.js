@@ -271,7 +271,7 @@ export const admin_user_upload = (file) => {
     return axios({
         url: '/admin/user/upload',
         method: 'post',
-        data:{file}
+        data: {file}
     })
 }
 
