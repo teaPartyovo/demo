@@ -1,7 +1,7 @@
 export default {
     method: 'get',
     // 基础url前缀
-    baseURL: 'http://localhost:90/api',
+    baseURL: 'http://45.76.107.194:9090/api',
     // 请求头信息
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
