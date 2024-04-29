@@ -180,7 +180,7 @@ export default {
     //开始维修
     handleEdit(row) {
       this.modalType = 1;
-      this.dialogVisible = true;
+      this.dialogVisible = false;
       this.row_id = row.id;
       // 要对当前行数据进行深拷贝
       this.form = JSON.parse(JSON.stringify(row));
