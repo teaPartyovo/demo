@@ -1,7 +1,12 @@
 <template>
   <!-- <h3>实验课申请登记</h3> -->
   <div class="manage">
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="50%"
+      :before-close="handleClose"
+    >
       <!-- <span>这是一段信息</span> -->
 
       <!-- 用户的表单信息 -->
@@ -22,33 +27,63 @@
         <!-- 感觉可能不需要，因为就是自己 -->
 
         <el-form-item label="课程名称" prop="courseName">
-          <el-input placeholder="请输入课程名称" v-model="form.courseName"></el-input>
+          <el-input
+            placeholder="请输入课程名称"
+            v-model="form.courseName"
+          ></el-input>
         </el-form-item>
 
-        <el-form-item label="申请的实验室类型" prop="labType">
-          <el-input placeholder="请输入申请的实验室类型" v-model="form.labType"></el-input>
-        </el-form-item>
+        <el-form
+          ref="form"
+          :rules="rules"
+          :model="form"
+          label-width="140px"
+          label-position="left"
+        >
+          <el-form-item label="申请的实验室类型" prop="labType" >
+            <el-select v-model="form.labType" placeholder="请选择" style="width: 530px;">
+              <el-option label="软件" value="软件"></el-option>
+              <el-option label="硬件" value="硬件"></el-option>
+              <el-option label="系统" value="系统"></el-option>
+              <el-option label="网络" value="网络"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
 
         <el-form-item label="班级" prop="studentClass">
-          <el-input placeholder="请输入申请原因" v-model="form.studentClass"></el-input>
+          <el-input
+            placeholder="请输入教学班级"
+            v-model="form.studentClass"
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="学生人数" prop="studentCount">
-          <el-input placeholder="请输入学生人数" v-model="form.studentCount"></el-input>
+          <el-input
+            placeholder="请输入学生人数"
+            v-model="form.studentCount"
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="起始周" prop="startWeek">
-          <el-input placeholder="请输入起始周" v-model="form.startWeek"></el-input>
+          <el-input
+            placeholder="请输入起始周"
+            v-model="form.startWeek"
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="结束周" prop="endWeek">
-          <el-input placeholder="请输入结束周" v-model="form.endWeek"></el-input>
+          <el-input
+            placeholder="请输入结束周"
+            v-model="form.endWeek"
+          ></el-input>
         </el-form-item>
 
         <el-form-item label="节次" prop="sessionNumber">
-          <el-input placeholder="请输入节次" v-model="form.sessionNumber"></el-input>
+          <el-input
+            placeholder="请输入节次"
+            v-model="form.sessionNumber"
+          ></el-input>
         </el-form-item>
-
       </el-form>
 
       <!-- 表单的取消确认 -->
@@ -56,12 +91,10 @@
         <el-button @click="handleClose">取 消</el-button>
         <el-button type="primary" @click="submit">确 定</el-button>
       </span>
-
     </el-dialog>
 
     <!-- 头部功能区+表格区 -->
     <div class="manage-header">
-
       <!-- 头部功能区：按钮 -->
       <el-button @click="handleAdd" type="primary">
         <!-- @click="dialogVisible = true" -->
@@ -69,13 +102,11 @@
       </el-button>
 
       <!-- 头部功能区：form搜索区 不需要-->
-
     </div>
 
     <!-- 表格区 -->
     <div class="common-table">
       <el-table height="90%" :data="tableData" style="width: 100%" stripe="">
-
         <el-table-column prop="id" label="申请ID" align="center">
         </el-table-column>
 
@@ -113,8 +144,13 @@
 
         <el-table-column prop="addr" label="操作" align="center">
           <template slot-scope="scope">
-              <el-button size="mini" @click="handleEdit(scope.row)" v-if="scope.row.status=='未排课'">修改</el-button>
-              <!-- <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button> -->
+            <el-button
+              size="mini"
+              @click="handleEdit(scope.row)"
+              v-if="scope.row.status == '未排课'"
+              >修改</el-button
+            >
+            <!-- <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -134,47 +170,29 @@ export default {
     return {
       dialogVisible: false,
       form: {
-        semesterId: '', // 初始化申请学期字段
-        courseName: '',
-        teacherId: '',
-        courseName: '',
-        labType: '',
-        studentClass: '',
-        studentCount: '',
-        startWeek: '',
-        endWeek: '',
-        sessionNumber: '',
+        semesterId: "", // 初始化申请学期字段
+        courseName: "",
+        teacherId: "",
+        courseName: "",
+        labType: "",
+        studentClass: "",
+        studentCount: "",
+        startWeek: "",
+        endWeek: "",
+        sessionNumber: "",
         // 似乎缺少一个星期几上课，不知道后端会不会自动排星期几
       },
       semesters: [], // 存放已有的学期数据
       rules: {
-        semesterId: [
-          { required: true, message: '请输入学期' }
-        ],
-        teacherId: [
-          { required: true, message: '请输入申请周次' }
-        ],
-        courseName: [
-          { required: true, message: '请输入课程名称' }
-        ],
-        labType: [
-          { required: true, message: '请输入申请的实验室类型' }
-        ],
-        studentClass: [
-          { required: true, message: '请输入班级' }
-        ],
-        studentCount: [
-          { required: true, message: '请输入学生人数' }
-        ],
-        startWeek: [
-          { required: true, message: '请输入起始周' }
-        ],
-        endWeek: [
-          { required: true, message: '请输入结束周' }
-        ],
-        sessionNumber: [
-          { required: true, message: '请输入节次' }
-        ],
+        semesterId: [{ required: true, message: "请输入学期" }],
+        teacherId: [{ required: true, message: "请输入申请周次" }],
+        courseName: [{ required: true, message: "请输入课程名称" }],
+        labType: [{ required: true, message: "请输入申请的实验室类型" }],
+        studentClass: [{ required: true, message: "请输入班级" }],
+        studentCount: [{ required: true, message: "请输入学生人数" }],
+        startWeek: [{ required: true, message: "请输入起始周" }],
+        endWeek: [{ required: true, message: "请输入结束周" }],
+        sessionNumber: [{ required: true, message: "请输入节次" }],
       },
       // tableData: [],
       tableData: [
@@ -195,7 +213,7 @@ export default {
       ],
       row_id: 0,
       modalType: 0, //0 新增的弹窗 1 修改的弹窗
-      // 
+      //
 
       // total: 0, //当前总条数
       // pageData: {
@@ -212,35 +230,35 @@ export default {
 
   methods: {
     async fetchSemesters() {
-  try {
-    const response = await this.$api.teacher_experiment_get();
-    //alert (JSON.stringify(response));
-    if (response.data && Array.isArray(response.data)) {
-      // 将后端返回的数据保存到前端的 semesters 中
-      const weekNames = ['一', '二', '三', '四', '五']; // 周数到汉字的映射
-      this.tableData = response.data.map(item => {
-        const weekNumber = Math.floor((item.sessionNumber - 1) / 6);
-        const courseNumber = (item.sessionNumber - 1) % 6 + 1;
-        return {
-          id: item.id,
-          courseName: item.courseName,
-          labType: item.labType,
-          studentClass: item.studentClass,
-          studentCount: item.studentCount,
-          startWeek: item.startWeek,
-          endWeek: item.endWeek,
-          sessionNumber: `周${weekNames[weekNumber]}第${courseNumber}节课`,
-          status: item.status === 0 ? '未排课' : '已排课',
-        };
-      });
-      console.log('成功从后端获取数据：', this.tableData);
-    } else {
-      console.error('从后端获取的数据格式不正确：', response.data);
-    }
-  } catch (error) {
-    console.error('Error in admin_user_get:', error);
-  }
-},
+      try {
+        const response = await this.$api.teacher_experiment_get();
+        //alert (JSON.stringify(response));
+        if (response.data && Array.isArray(response.data)) {
+          // 将后端返回的数据保存到前端的 semesters 中
+          const weekNames = ["一", "二", "三", "四", "五"]; // 周数到汉字的映射
+          this.tableData = response.data.map((item) => {
+            const weekNumber = Math.floor((item.sessionNumber - 1) / 6);
+            const courseNumber = ((item.sessionNumber - 1) % 6) + 1;
+            return {
+              id: item.id,
+              courseName: item.courseName,
+              labType: item.labType,
+              studentClass: item.studentClass,
+              studentCount: item.studentCount,
+              startWeek: item.startWeek,
+              endWeek: item.endWeek,
+              sessionNumber: `周${weekNames[weekNumber]}第${courseNumber}节课`,
+              status: item.status === 0 ? "未排课" : "已排课",
+            };
+          });
+          console.log("成功从后端获取数据：", this.tableData);
+        } else {
+          console.error("从后端获取的数据格式不正确：", response.data);
+        }
+      } catch (error) {
+        console.error("Error in admin_user_get:", error);
+      }
+    },
 
     submit() {
       this.$refs.form.validate((valid) => {
@@ -322,13 +340,13 @@ export default {
       this.modalType = 1;
       this.dialogVisible = true;
       this.row_id = row.id;
-      this.id=row.id
+      this.id = row.id;
       // 要对当前行数据进行深拷贝
       this.form = JSON.parse(JSON.stringify(row));
     },
     handleClose() {
-      this.$refs.form.resetFields()
-      this.dialogVisible = false
+      this.$refs.form.resetFields();
+      this.dialogVisible = false;
     },
     // handleDelete(row) {
     //   this.$api
@@ -348,34 +366,33 @@ export default {
     // },
 
     handleAdd() {
-      this.modalType = 0
-      this.dialogVisible = true
+      this.modalType = 0;
+      this.dialogVisible = true;
     },
-
 
     //获取列表的数据
     getList() {
-      getUser({ params: { ...this.userForm, ...this.pageData } }).then(({ data }) => { //合并对象属性
-        console.log(data);
-        this.tableData = data.list;
-        this.total = data.count || 0
-      })
+      getUser({ params: { ...this.userForm, ...this.pageData } }).then(
+        ({ data }) => {
+          //合并对象属性
+          console.log(data);
+          this.tableData = data.list;
+          this.total = data.count || 0;
+        }
+      );
     },
     // 选择页码的回调函数
     handlePage(val) {
       console.log(val);
       this.pageData.page = val;
-      this.getList()
+      this.getList();
     },
     // 列表的查询
     onSubmit() {
-      this.getList()
+      this.getList();
     },
-
-
-  }
-
-}
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -391,7 +408,6 @@ export default {
   .common-table {
     position: relative;
     height: calc(100% - 62px);
-
   }
 }
 </style>
