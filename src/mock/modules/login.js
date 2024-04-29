@@ -5,11 +5,11 @@ export function login () {
       url: 'http://localhost:8080/login_mock',
       type: 'get',
       data: {
-        "code": 28,
+        "code": 0,
         "message": "tempor",
         "data": {
           "id": 96,
-          "role": 2,
+          "role": 4,
           "token": "tokenmock"
         }
       }

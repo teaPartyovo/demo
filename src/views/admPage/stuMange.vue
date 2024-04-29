@@ -23,7 +23,7 @@
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="dialogFormVisible = false"
+            <el-button type="primary" @click="dialogFormVisible = false,adduser()"
               >确 定</el-button
             >
           </div>
@@ -37,7 +37,7 @@
           :show-file-list="false"
           class="upload-demo"
           action="https://jsonplaceholder.typicode.com/posts/"
-          :on-change="handleChange"
+          :on-change="handleFileUpload"
           style="display: inline-block; margin-left: 10px;"
         >
           <el-button size="big" type="primary">上传添加批量用户</el-button>
@@ -78,6 +78,23 @@ export default {
       this.admin_user_get();
   },
   methods: {
+    adduser()
+    {
+
+    },
+
+    handleFileUpload(file) {
+    this.$api.admin_user_upload(file.raw)
+      .then(response => {
+        // 处理服务器的响应
+        console.log(response);
+      })
+      .catch(error => {
+        // 处理错误
+        console.error('Error in admin_user_upload:', error);
+      });
+     },
+
     async admin_user_get() {
       try {
         const response = await this.$api.admin_user_get(4, 1, 100000,null);
@@ -133,10 +150,10 @@ export default {
    }
     },
 
-    //文件
-    handleChange(file, fileList) {
-        this.fileList = fileList.slice(-3);
-    }
+    // //文件
+    // handleChange(file, fileList) {
+    //     this.fileList = fileList.slice(-3);
+    // }
   },
   data() {
     return {
