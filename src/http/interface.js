@@ -242,11 +242,11 @@ export const admin_reset = data => {
 }
 
 //新增用户信息
-export const admin_user_post = data => {
+export const admin_user_post = (id,username,password,name,role,title,major,classes) => {
     return axios({
         url: '/admin/user',
         method: 'post',
-        data
+        data:{id,username,password,name,role,title,major,classes}
     })
 }
 

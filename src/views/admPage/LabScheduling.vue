@@ -128,9 +128,9 @@ export default {
   methods: {
     onSubmit() {
       this.$api.admin_classes_put(this.row_id,this.form.lab.labNumber);
-      this.form.lab.status = 1;
+      //this.form.lab.status = 1;
       this.get_admin_classes();
-      //location.reload();
+      location.reload();
     },
     async fetchLabList(item) {
       //alert(item.id)
