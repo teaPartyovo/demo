@@ -231,20 +231,20 @@ export const admin_user_get = (role,page,pageSize,name) => {
 }
 
 //删除用户信息
-export const admin_user_delete = data => {
+export const admin_user_delete = (userId) => {
     return axios({
         url: '/admin/user',
         method: 'delete',
-        data
+        params:{userId}
     })
 }
 
 //重置密码
-export const admin_reset = data => {
+export const admin_reset = (userId) => {
     return axios({
-        url: '/admin/reset',
+        url: '/admin/user/reset',
         method: 'put',
-        data
+        params:{userId}
     })
 }
 
@@ -258,11 +258,11 @@ export const admin_user_post = (id,username,password,name,role,title,major,class
 }
 
 //更新用户信息
-export const admin_user_put = data => {
+export const admin_user_put = (id,username,password,name,role,title,major,classes) => {
     return axios({
         url: '/admin/user',
         method: 'put',
-        data
+        data:{id,username,password,name,role,title,major,classes}
     })
 }
 

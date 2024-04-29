@@ -68,8 +68,8 @@
       <el-table-column prop="title" label="职称" width="120"> </el-table-column>
       <el-table-column prop="account" label="账号" width="200">
       </el-table-column>
-      <el-table-column prop="password" label="密码" width="120">
-      </el-table-column>
+      <!-- <el-table-column prop="password" label="密码" width="120">
+      </el-table-column> -->
       <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
           <el-button @click="handleDelete(scope.row)" type="text" size="small">
@@ -101,10 +101,15 @@ export default {
           if (this.modaltype === 0) {
             // 添加表单提交
             console.log(this.form);
+            this.$api.admin_user_post(null,this.form.account,this.form.password,this.form.name,"3",this.form.title,null,null);
+            // this.admin_user_get();
+            // location.reload();
             //关闭弹窗
             this.dialogFormVisible = false;
+            
           } else {
             //编辑表单提交
+            this.$api.admin_user_put(this.form.id,this.form.account,this.form.password,this.form.name,"3",this.form.title,null,null);
             console.log(this.form);
             //关闭弹窗
             this.dialogFormVisible = false;
@@ -120,6 +125,9 @@ export default {
         type: "warning",
       })
         .then(() => {
+          this.$api.admin_user_delete(row.id);
+          this.admin_user_get();
+          // location.reload();
           this.$message({
             type: "success",
             message: "删除成功!",
@@ -140,6 +148,7 @@ export default {
         type: "warning",
       })
         .then(() => {
+          this.$api.admin_reset(row.id);
           this.$message({
             type: "success",
             message: "重置成功!",
@@ -192,8 +201,9 @@ export default {
 
           this.tableData = response.data.map((item) => ({
             name: item.name,
-            address: item.username,
-            id: item.id,
+            title: item.title,
+            account: item.username,
+            id:item.id,
           }));
           // alert(JSON.stringify(this.tableData))
           // 从后端获取实验室列表数据
@@ -224,8 +234,9 @@ export default {
 
           this.tableData = response.data.map((item) => ({
             name: item.name,
-            address: item.username,
-            id: item.id,
+            title: item.title,
+            account: item.username,
+            id:item.id,
           }));
           // alert(JSON.stringify(this.tableData))
           // 从后端获取实验室列表数据
