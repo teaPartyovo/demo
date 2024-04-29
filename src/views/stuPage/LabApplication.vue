@@ -109,7 +109,7 @@
 
         <el-table-column prop="addr" label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.row)"
+            <el-button size="mini" @click="handleEdit(scope.row)" v-if="scope.row.status == '未审核'"
               >修改</el-button
             >
             <el-button
