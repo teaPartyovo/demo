@@ -175,7 +175,7 @@ export default {
         {
           space: "星期一",
           lab: "计算机系统实验室",
-          number: "704-708",
+          number: "704",
           first: "",
           second: "",
           third: "",
@@ -186,7 +186,7 @@ export default {
         {
           space: "星期一",
           lab: "计算机硬件实验室",
-          number: "703、707",
+          number: "705",
           first: "",
           second: "",
           third: "",
@@ -197,7 +197,7 @@ export default {
         {
           space: "星期一",
           lab: "计算机系统实验室",
-          number: "801、803",
+          number: "801",
           first: "",
           second: "",
           third: "",
@@ -208,7 +208,7 @@ export default {
         {
           space: "星期一",
           lab: "物联网实验室",
-          number: "806、808",
+          number: "802",
           first: "",
           second: "",
           third: "",
@@ -219,7 +219,7 @@ export default {
         {
           space: "星期一",
           lab: "计算机网络实验室",
-          number: "832、834",
+          number: "832",
           first: "",
           second: "",
           third: "",
