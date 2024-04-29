@@ -80,7 +80,7 @@ export const student_loan_put = (id,weekNumber,sessionNumber,labNumber,applicati
 //完成实验室借用申请
 export const student_loan_id = (id) => {
     return axios({
-        url: '/student/loan/{id}',
+        url: `/student/loan/${id}`,
         method: 'put',
         data
     })

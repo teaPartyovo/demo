@@ -109,7 +109,7 @@
 
         <el-table-column prop="addr" label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.row)"
+            <el-button size="mini" @click="handleEdit(scope.row)" v-if="scope.row.status == '未审核'"
               >修改</el-button
             >
             <el-button
@@ -311,6 +311,7 @@ export default {
       this.form = JSON.parse(JSON.stringify(row));
     },
     handleDelete(row) {
+      alert(1)
       this.$api
         .student_loan_id(row.id)
         .then((result) => {
