@@ -51,6 +51,12 @@ export default {
         .then(function (res) {
           //alert(res.data.token);
           // alert(res.data.role);
+          // alert(JSON.stringify(res.data))
+          if(!res.data){
+            alert("账号或密码错误");
+            return ;
+          }
+
           Cookies.set('token',res.data.token);
           if(res.data.role == 1){
             router.replace('/admin');
