@@ -105,7 +105,7 @@ export default {
       const token = Cookies.get('token')
       // alert(form)
       axios
-          .post("http://localhost:90/api/admin/user/upload", form, {
+          .post("http://www.scaunet.cn:80/api/admin/user/upload", form, {
             headers: {
               // 'Content-Type': 'multipart/form-data', // 设置请求头，指定数据格式为 multipart/form-data
               Authorization: `Bearer ${token}`,

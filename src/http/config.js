@@ -1,7 +1,7 @@
 export default {
     method: 'get',
     // 基础url前缀
-    baseURL: 'http://www.scaunet.cn:90/api',
+    baseURL: 'http://www.scaunet.cn:80/api',
     // 请求头信息
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
