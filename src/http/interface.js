@@ -324,7 +324,7 @@ export const admin_loan_put = (id, status) => {
     return axios({
         url: '/admin/loan',
         method: 'put',
-        params: { id, password }
+        params: { id, status }
     })
 }
 
