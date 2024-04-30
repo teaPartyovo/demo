@@ -22,3 +22,6 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### 配置方法
+https://blog.csdn.net/weixin_44786530/article/details/128252147
